@@ -1,0 +1,21 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Build outputs
+*.exe
+*.o
+build/
+
+# Dataset & generated images (dataset lives in E:\X-Ray Dataset, not in git)
+dataset/
+*.zip
+output/
+results/raw/
+
+# Editor / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
