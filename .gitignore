@@ -4,15 +4,16 @@ __pycache__/
 *.pyc
 
 # Build outputs
+bin/
+build/
 *.exe
 *.o
-build/
 
-# Dataset & generated images (dataset lives in E:\X-Ray Dataset, not in git)
-dataset/
-*.zip
+# Generated images and raw logs (dataset lives in E:\X-Ray Dataset, not in git)
 output/
+demo/output/
 results/raw/
+*.zip
 
 # Editor / OS
 .vscode/
