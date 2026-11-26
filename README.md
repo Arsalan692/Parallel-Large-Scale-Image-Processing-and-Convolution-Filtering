@@ -72,7 +72,7 @@ Each program accepts `--help` to list its options (`--input`, `--count`, `--save
 - [x] Phase 2: sequential baseline (10,000 images: 212.8 s)
 - [x] Phase 3: OpenMP version (best: 8 threads, images mode, 56.9 s = 3.74x)
 - [x] Phase 4: MPI versions (batch: 8 procs 54.9 s = 3.88x; strips: best 4 procs 141.3 s = 1.51x)
-- [ ] Phase 5: hybrid MPI + OpenMP
+- [x] Phase 5: hybrid MPI + OpenMP (batch best 1x8 50.1 s = 4.25x; strips best 1x8 132.7 s)
 - [ ] Phase 6: benchmarks
 - [ ] Phase 7: analysis and graphs
 - [ ] Phase 8: report

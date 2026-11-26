@@ -82,10 +82,22 @@ Apply three convolution filters (Gaussian blur 5×5, sharpen 3×3, Sobel edge de
   - **Strips at P=8 is slower than at P=4.** 8 processes share 4 cores, and MPI processes that are waiting keep polling (busy-waiting) instead of sleeping. They steal CPU time from rank 0, whose reading slows from 92 s to 114 s.
   - Strip decomposition is designed for **one very large image** that one process cannot handle. For a batch of many small images, distributing whole images (batch) is far better.
 
-## Phase 5: Hybrid MPI + OpenMP
-- [ ] Both MPI programs with OpenMP threads inside each process (`MPI_THREAD_FUNNELED`)
-- [ ] Configurations (processes × threads): 1×8, 2×4, 4×2, 8×1, and 2×2
-- **Key question:** with the same total of 8 workers, which split is fastest, and why?
+## Phase 5: Hybrid MPI + OpenMP ✅
+- [x] Both MPI programs with OpenMP threads inside each process (`MPI_THREAD_FUNNELED`; MPI calls only outside parallel regions)
+- [x] Configurations (processes × threads) 1×8, 2×4, 4×2, 8×1 and 2×2 on 10,000 images (`results/hybrid_phase5.csv`); **all 10 runs match the sequential checksum**
+
+| P × T | mpi_batch | mpi_strips |
+|---|---|---|
+| 1×8 | **50.1 s (4.25×)** | **132.7 s (1.60×)** |
+| 2×4 | 55.4 s (3.84×) | 135.2 s (1.57×) |
+| 4×2 | 54.7 s (3.89×) | 145.5 s (1.46×) |
+| 8×1 | 54.5 s (3.90×) | 174.8 s (1.22×) |
+| 2×2 (4 workers) | 67.7 s (3.14×) | 148.1 s (1.44×) |
+
+- Findings:
+  - **Batch:** the split hardly matters on one 4-core machine (54–55 s; 1×8 at 50 s is within the ~10% run-to-run variation, which Phase 6 will check with repeats). All workers share the same memory and cores, and batch barely communicates.
+  - **Strips:** fewer processes and more threads is clearly better (1×8 = 132.7 s vs 8×1 = 174.8 s). Fewer MPI processes means less communication (comm 2.9 s → 13.0 s as P grows) and fewer busy-waiting processes slowing rank 0's reading (91 s → 116 s).
+  - Hybrid pays off most when communication matters. On a real cluster you would run one MPI process per machine and OpenMP threads inside each machine.
 
 ## Phase 6: Benchmarking
 - [ ] An automated script runs every configuration and writes the results to a CSV file
