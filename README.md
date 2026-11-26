@@ -73,7 +73,8 @@ Each program accepts `--help` to list its options (`--input`, `--count`, `--save
 - [x] Phase 3: OpenMP version (best: 8 threads, images mode, 56.9 s = 3.74x)
 - [x] Phase 4: MPI versions (batch: 8 procs 54.9 s = 3.88x; strips: best 4 procs 141.3 s = 1.51x)
 - [x] Phase 5: hybrid MPI + OpenMP (batch best 1x8 50.1 s = 4.25x; strips best 1x8 132.7 s)
-- [ ] Phase 6: benchmarks
+- [x] Phase 6: final benchmark, 27 configs x 2 repeats on 10,000 images, all checksums identical (`results/benchmarks.csv`; seq 195.1 s, best OpenMP images 8 thr 55.3 s = 3.53x, MPI batch 8 procs 55.7 s = 3.50x)
+  - run it: `powershell -ExecutionPolicy Bypass -File scriptsbenchmark.ps1` (about 2 h; resumable)
 - [ ] Phase 7: analysis and graphs
 - [ ] Phase 8: report
 - [ ] Phase 9: submission and viva prep

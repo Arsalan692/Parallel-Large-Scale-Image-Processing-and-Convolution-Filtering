@@ -99,11 +99,34 @@ Apply three convolution filters (Gaussian blur 5×5, sharpen 3×3, Sobel edge de
   - **Strips:** fewer processes and more threads is clearly better (1×8 = 132.7 s vs 8×1 = 174.8 s). Fewer MPI processes means less communication (comm 2.9 s → 13.0 s as P grows) and fewer busy-waiting processes slowing rank 0's reading (91 s → 116 s).
   - Hybrid pays off most when communication matters. On a real cluster you would run one MPI process per machine and OpenMP threads inside each machine.
 
-## Phase 6: Benchmarking
-- [ ] An automated script runs every configuration and writes the results to a CSV file
-- [ ] Quick runs: 1,000 images, repeated 3× (to check consistency)
-- [ ] Final runs: 10,000 images
-- Conditions: on AC power, "Best performance" power plan, dataset folder excluded from Avast (done), heavy apps closed
+## Phase 6: Benchmarking ✅
+- [x] `scripts/benchmark.ps1`: runs all 27 configurations, appends one CSV row per run, and can resume after an interruption (runs already in the CSV are skipped)
+- [x] Smoke test: 50 images × 27 configurations, all with the same checksum
+- [x] Final runs: **10,000 images × 27 configurations × 2 repeats = 54 runs** (about 1 h 50 min) → `results/benchmarks.csv`. The repeat loop is the outer loop, so slow drift of the machine affects every configuration equally. (This replaced the planned 1,000-image × 3 quick runs: two full passes measure consistency directly.)
+- [x] **All 54 runs have checksum `f3eee2e41bf6a7ce`** (bit-identical to the sequential version)
+- [x] Consistency: the two repeats differ by under 2% for 23 of the 27 configurations (worst is strips-2x1 at 7%)
+- Conditions: on AC power, "Best performance" power mode, dataset folder excluded from Avast, heavy apps closed
+- Final numbers. Mean of 2 runs. Speedup is against the re-measured sequential time of **195.1 s**. Efficiency = speedup / (P×T); 8 workers means 4 cores plus hyper-threads.
+
+| Configuration | Time | Speedup | Efficiency | Read | Compute | Comm |
+|---|---|---|---|---|---|---|
+| sequential | 195.1 s | 1.00× | 100% | 85.5 | 103.7 | 0 |
+| OpenMP rows 2 / 4 / 8 thr | 146.8 / 127.2 / 122.4 s | 1.33 / 1.53 / 1.59× | 66 / 38 / 20% | ~85 (sequential) | 55.8 / 36.7 / 31.9 | 0 |
+| OpenMP images 2 / 4 / 8 thr | 103.2 / 66.6 / **55.3 s** | 1.89 / 2.93 / **3.53×** | 95 / 73 / 44% | 45.4 / 28.8 / 21.2 | 54.2 / 35.5 / 32.4 | 0 |
+| OpenMP 8 thr dynamic (rows / images) | 123.0 / 55.7 s | 1.59 / 3.50× | same as static | | | |
+| MPI batch 2 / 4 / 8 procs | 103.8 / 66.9 / 55.7 s | 1.88 / 2.91 / 3.50× | 94 / 73 / 44% | 45.3 / 28.5 / 21.4 | 54.9 / 36.1 / 32.7 | 0.2 |
+| MPI strips 2 / 4 / 8 procs | 157.8 / 141.0 / 170.4 s | 1.24 / 1.38 / 1.14× | 62 / 35 / 14% | 86.3 / 92.8 / 113.4 | 48.3 / 27.3 / 28.7 | 12.2 / 9.2 / 12.3 |
+| Hybrid batch 1×8 / 2×4 / 4×2 | 57.1 / 56.7 / 57.1 s | 3.42 / 3.44 / 3.42× | 43% | ~22 | ~33.5 | 0 |
+| Hybrid strips 1×8 / 2×4 / 4×2 | 127.3 / 134.9 / 147.0 s | 1.53 / 1.45 / 1.33× | 19 / 18 / 17% | 86.6 / 91.2 / 99.6 | ~27 | 3.0 / 4.9 / 7.0 |
+| 2×2 (4 workers): batch / strips | 69.8 / 145.7 s | 2.79 / 1.34× | 70 / 33% | 30.0 / 89.4 | 37.3 / 34.2 | 0 / 10.8 |
+
+- Findings (these confirm Phases 3–5 with repeated, controlled runs):
+  - **The best results are coarse-grained: whole images per worker.** OpenMP images mode (55.3 s), MPI batch 8×1 (55.7 s) and the hybrid batch splits (~57 s) are all within ~3% of each other. On one shared-memory machine, how the 8 workers are organised (threads vs processes) barely matters when they don't need to talk.
+  - Phase 5's "1×8 = 50.1 s" was run-to-run noise. With repeats, every batch split lands at 56–57 s.
+  - Efficiency is ~95% at 2 workers and ~73% at 4, then drops to ~44% at 8 because workers 5–8 are hyper-threads.
+  - **Fine-grained versions are limited by the sequential read** (Amdahl). OpenMP rows and every strips configuration keep reading at ≥85 s on one core. Compute shrinks (103.7 → ~27 s), but the total cannot go below ~110 s.
+  - **Strips gets worse with more processes:** comm grows, and busy-polling ranks slow rank 0's reading (85 → 113 s at P=8). Fewer processes with more threads (1×8) is the best strips setup.
+  - Static vs dynamic scheduling: identical (uniform 1024×1024 images).
 
 ## Phase 7: Analysis and graphs
 - [ ] Graphs:
