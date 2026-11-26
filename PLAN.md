@@ -128,20 +128,30 @@ Apply three convolution filters (Gaussian blur 5×5, sharpen 3×3, Sobel edge de
   - **Strips gets worse with more processes:** comm grows, and busy-polling ranks slow rank 0's reading (85 → 113 s at P=8). Fewer processes with more threads (1×8) is the best strips setup.
   - Static vs dynamic scheduling: identical (uniform 1024×1024 images).
 
-## Phase 7: Analysis and graphs
-- [ ] Graphs:
-  - execution time
-  - speedup
-  - efficiency
-  - batch vs strips
-  - the hybrid configurations
-  - compute / communication / I/O breakdown
-- [ ] Observations:
-  - Amdahl's law
-  - 4 physical cores vs 8 logical cores (hyper-threading)
-  - turbo boost and thermal limits
-  - I/O cost
-  - communication overhead of strip decomposition
+## Phase 7: Analysis and graphs ✅
+- [x] `analysis/make_graphs.py` reads `results/benchmarks.csv` and writes everything below with one command (`D:\Python\python.exe analysis\make_graphs.py`)
+- [x] Graphs in `report/figures/`:
+
+| File | What it shows |
+|---|---|
+| `fig1_time.png` | execution time vs 1/2/4/8 workers, with the sequential time as a reference line |
+| `fig2_speedup.png` | speedup vs the ideal (linear) speedup |
+| `fig3_efficiency.png` | efficiency |
+| `fig4_hybrid.png` | the hybrid P×T splits, batch vs strips |
+| `fig5_breakdown.png` | read / compute / communication / other for 8 key configurations |
+| `fig6_amdahl.png` | measured speedup vs the Amdahl prediction (f = 0.44, ceiling 2.28×) |
+
+- [x] Summary table: `results/summary.csv` and `results/summary.md` (mean, min–max, speedup and efficiency for all 27 configurations)
+- [x] Observations written in `report/observations.md`:
+  - Amdahl's law (the sequential read is 44% of the time)
+  - hyper-threading: efficiency 95% at 2 workers, 73% at 4, 44% at 8
+  - clock speed and shared cache
+  - I/O is CPU-bound PNG decoding
+  - strips: communication (~40 GB moved) and busy-polling
+  - hybrid improves strips by 25%
+  - static and dynamic scheduling perform the same
+  - why repeats matter
+- Colours are validated for colour-blind readers. Each series keeps the same colour in every figure.
 
 ## Phase 8: Report (Word .docx)
 Sections in the instructor's order:
