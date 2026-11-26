@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Our PDC Project, Explained: A Plain-Language Guide for the Viva</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 19mm 19mm 19mm;
+    @top-right { content: "Our PDC project, explained  ·  Group 18"; font: 8pt "Segoe UI", sans-serif; color: #8a94a3; }
+    @bottom-center { content: counter(page); font: 9pt "Segoe UI", sans-serif; color: #5f6b7a; }
+  }
+  @page :first { @top-right { content: none; } @bottom-center { content: none; } }
+
+  :root {
+    --navy: #1f3a5f; --accent: #257de0; --ink: #1f2328; --ink2: #5f6b7a; --rule: #d9dee5;
+    --tint: #eef3f9; --amber-bg: #fff6e0; --amber: #e0a100; --green-bg: #e9f6ee; --green: #1f8a4c;
+    --blue: #257de0; --orange: #f47230; --aqua: #00b894; --yellow: #f2a600;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: Cambria, Georgia, serif; font-size: 10.6pt; line-height: 1.55; color: var(--ink); margin: 0; }
+  p { margin: 0 0 8pt; text-align: justify; hyphens: auto; }
+  h1, h2, h3, h4, .label, th, figcaption, .callout b.t, .toc, .stat { font-family: "Segoe UI", Calibri, sans-serif; }
+  h1 { break-before: page; font-size: 24pt; font-weight: 600; color: var(--navy); margin: 0 0 4pt; line-height: 1.2; }
+  h1 .part { display: block; font-size: 9pt; letter-spacing: .16em; color: var(--accent); font-weight: 700; margin-bottom: 6pt; }
+  .intro { font-size: 11.2pt; color: var(--ink2); margin-bottom: 16pt; border-bottom: 1px solid var(--rule); padding-bottom: 12pt; }
+  h2 { font-size: 14.5pt; font-weight: 600; color: var(--navy); margin: 20pt 0 6pt; break-after: avoid; }
+  h2 .n { color: var(--accent); margin-right: 8pt; }
+  h3 { font-size: 11.3pt; font-weight: 600; color: var(--navy); margin: 14pt 0 4pt; break-after: avoid; }
+  ul, ol { margin: 0 0 8pt; padding-left: 18pt; }
+  li { margin-bottom: 3pt; }
+  ul li::marker { color: var(--accent); }
+  ol li::marker { color: var(--navy); font-family: "Segoe UI", sans-serif; font-weight: 600; }
+  code, .mono { font-family: Consolas, monospace; font-size: 9.2pt; color: #0b4f8a; background: #f2f5f9; padding: 0 2pt; border-radius: 2pt; }
+  pre { font-family: Consolas, monospace; font-size: 8.8pt; line-height: 1.45; background: #f6f8fa; border: 1px solid var(--rule);
+        border-radius: 4pt; padding: 8pt 10pt; margin: 4pt 0 10pt; white-space: pre-wrap; break-inside: avoid; color: #24292f; }
+  b, strong { font-weight: 700; }
+  em { font-style: italic; }
+
+  /* Callouts */
+  .callout { border-left: 3.5pt solid var(--accent); background: var(--tint); padding: 7pt 11pt; margin: 8pt 0 11pt;
+             border-radius: 0 4pt 4pt 0; break-inside: avoid; }
+  .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+  .callout b.t { display: block; font-size: 8.5pt; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 2pt; }
+  .callout.viva { border-color: var(--amber); background: var(--amber-bg); }
+  .callout.viva b.t { color: #9a6b00; }
+  .callout.remember { border-color: var(--green); background: var(--green-bg); }
+  .callout.remember b.t { color: var(--green); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 6pt 0 12pt; font-family: "Segoe UI", Calibri, sans-serif; font-size: 9pt; line-height: 1.4; break-inside: avoid; }
+  th { background: var(--navy); color: #fff; font-weight: 600; text-align: left; padding: 5pt 7pt; }
+  td { padding: 4.5pt 7pt; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  tr.group td { background: var(--tint); color: var(--navy); font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.best td { font-weight: 700; }
+  table.allow-break { break-inside: auto; }
+
+  /* Glossary cards */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 7pt 10pt; margin: 6pt 0 12pt; }
+  .term { border: 1px solid var(--rule); border-radius: 5pt; padding: 6pt 9pt; break-inside: avoid; }
+  .term > b { display: block; font-family: "Segoe UI", sans-serif; color: var(--navy); font-size: 9.8pt; margin-bottom: 1pt; }
+  .term span { font-size: 9.6pt; line-height: 1.45; display: block; }
+
+  /* Figures */
+  figure { margin: 8pt 0 12pt; break-inside: avoid; text-align: center; }
+  figure img { max-width: 100%; }
+  figure svg { max-width: 100%; height: auto; }
+  figcaption { font-size: 8.8pt; color: var(--ink2); margin-top: 4pt; text-align: center; }
+  figcaption b { color: var(--navy); }
+  .read { break-inside: avoid; }
+
+  /* Q&A */
+  .qa { margin: 0 0 9pt; break-inside: avoid; }
+  .qa .q { font-family: "Segoe UI", sans-serif; font-weight: 600; color: var(--navy); font-size: 10.2pt; margin-bottom: 2pt; }
+  .qa .q::before { content: "Q"; display: inline-block; width: 15pt; color: var(--accent); font-weight: 700; }
+  .qa .a { padding-left: 15pt; }
+  .qa .a p { margin-bottom: 4pt; }
+
+  /* Cover */
+  .cover { height: 250mm; display: flex; flex-direction: column; }
+  .cover .top { font-family: "Segoe UI", sans-serif; font-size: 9pt; letter-spacing: .14em; color: var(--navy); font-weight: 700; margin-top: 8mm; }
+  .cover .top span { display: block; letter-spacing: 0; font-weight: 400; color: var(--ink2); margin-top: 2pt; }
+  .cover .mid { margin-top: 62mm; }
+  .cover .kicker { font-family: "Segoe UI", sans-serif; font-size: 9.5pt; letter-spacing: .16em; color: var(--accent); font-weight: 700; }
+  .cover .title { font-family: "Segoe UI", sans-serif; font-size: 32pt; font-weight: 600; line-height: 1.12; color: var(--navy); margin: 8pt 0 10pt; }
+  .cover .sub { font-size: 13pt; font-style: italic; color: var(--ink2); max-width: 150mm; padding-bottom: 14pt; border-bottom: 2pt solid var(--accent); }
+  .cover .bottom { margin-top: auto; font-family: "Segoe UI", sans-serif; font-size: 9.5pt; color: var(--ink2); line-height: 1.6; }
+  .cover .bottom b { color: var(--ink); }
+  .stats { display: flex; gap: 10pt; margin-top: 18pt; }
+  .stat { flex: 1; border-left: 3pt solid var(--accent); padding: 2pt 0 2pt 9pt; }
+  .stat b { display: block; font-size: 19pt; color: var(--navy); }
+  .stat span { font-size: 8.3pt; color: var(--ink2); }
+
+  /* Contents */
+  .toc { font-size: 10pt; }
+  .toc .p { margin-top: 10pt; font-weight: 700; color: var(--navy); }
+  .toc .p small { color: var(--accent); letter-spacing: .12em; font-size: 8pt; margin-right: 6pt; }
+  .toc ol { margin: 3pt 0 0; padding-left: 20pt; color: var(--ink); }
+  .toc li { margin: 0 0 1.5pt; }
+  .two ul { columns: 2; column-gap: 22pt; }
+  .two li { break-inside: avoid; }
+  .center { text-align: center; }
+  .small { font-size: 9pt; color: var(--ink2); }
+  .keep { break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<!-- ======================================================================= COVER -->
+<section class="cover">
+  <div class="top">FAST-NUCES KARACHI  ·  CS3006 PARALLEL AND DISTRIBUTED COMPUTING
+    <span>Group 18  ·  Project #6  ·  Muhammad Yousuf (23K-0690), Arsalan Ahmed (23K-0536)</span></div>
+  <div class="mid">
+    <div class="kicker">PROJECT EXPLAINED  ·  VIVA GUIDE</div>
+    <div class="title">Our PDC Project, Explained from the Basics</div>
+    <div class="sub">Hybrid parallel image convolution on 10,000 chest X-rays: the concepts, the design decisions, the results, and what to say in the viva, in simple language.</div>
+    <div class="stats">
+      <div class="stat"><b>195 s → 55 s</b><span>sequential vs best parallel</span></div>
+      <div class="stat"><b>3.5×</b><span>speedup on a 4-core laptop</span></div>
+      <div class="stat"><b>54 / 54</b><span>runs with identical output</span></div>
+    </div>
+  </div>
+  <div class="bottom">
+    <b>How to use this guide.</b> Read Part 1 even if you think you know the terms: every later explanation builds on it.
+    Part 2 walks through the project, Part 3 explains every graph, Part 4 lists the decisions we made and why,
+    and Part 5 is the viva kit: a one-minute summary, likely questions with answers, numbers to remember and demo commands.
+  </div>
+</section>
+
+<!-- ======================================================================= CONTENTS -->
+<h1 style="font-size:20pt">Contents</h1>
+<div class="toc">
+  <div class="p"><small>PART 1</small>The basics: terms you must know</div>
+  <ol><li>Images are just numbers</li><li>Convolution and kernels</li><li>Our three filters</li><li>Parallel computing in one page</li>
+      <li>OpenMP: threads that share memory</li><li>MPI: processes that send messages</li><li>Hybrid MPI + OpenMP</li>
+      <li>Splitting the work: decomposition, granularity, load balance</li><li>Halo rows</li><li>Measuring performance: speedup, efficiency, Amdahl’s law</li></ol>
+  <div class="p"><small>PART 2</small>Our project, step by step</div>
+  <ol start="11"><li>The goal in one picture</li><li>The dataset</li><li>Tools and why we chose them</li><li>The programs we wrote</li>
+      <li>How each parallel version works</li><li>How we proved the output is correct</li><li>How we measured performance</li></ol>
+  <div class="p"><small>PART 3</small>The results, explained graph by graph</div>
+  <ol start="18"><li>The headline numbers</li><li>Execution time</li><li>Speedup and efficiency</li><li>Hybrid splits</li><li>Where the time goes</li><li>Amdahl’s law in our data</li></ol>
+  <div class="p"><small>PART 4</small>Decisions we made, and why</div>
+  <ol start="24"><li>Decision log</li></ol>
+  <div class="p"><small>PART 5</small>Viva preparation</div>
+  <ol start="25"><li>The project in one minute</li><li>Concepts to know cold</li><li>Likely viva questions, with answers</li><li>Numbers to remember</li><li>Live demo commands</li></ol>
+</div>
+
+<!-- ======================================================================= PART 1 -->
+<h1><span class="part">PART 1</span>The basics: terms you must know</h1>
+<p class="intro">Everything in this project rests on a handful of ideas. This part explains each one with a small example. If you can explain these ten sections in your own words, you can defend the project.</p>
+
+<h2><span class="n">1</span>Images are just numbers</h2>
+<p>A digital image is a grid of tiny squares called <b>pixels</b>. In a <b>grayscale</b> image each pixel holds a single number from <b>0 (black) to 255 (white)</b>; that range fits exactly in one byte (8 bits). Our X-rays are <b>1024 × 1024</b> pixels, so one image is 1,048,576 numbers, about 1 MB in memory.</p>
+<p>On disk the images are stored as <b>PNG</b> files. PNG is <em>compressed</em>, like a ZIP file, so before we can use an image the computer must <b>decode</b> (decompress) it. Decoding takes real CPU work. This detail turns out to be one of the most important facts in the whole project (see Section 10 and Part 3).</p>
+
+<h2><span class="n">2</span>Convolution and kernels</h2>
+<p>A <b>kernel</b> is a small grid of weights, for example 3 × 3. <b>Convolution</b> means sliding the kernel over every pixel of the image. At each position, we multiply each weight by the pixel under it, add the products up, and the total becomes the new value of the centre pixel. Different weights produce different effects.</p>
+
+<figure>
+<svg viewBox="0 0 640 210" width="640" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, sans-serif">
+  <g font-size="13" text-anchor="middle">
+    <text x="85" y="18" font-weight="600" fill="#1f3a5f">Image neighbourhood</text>
+    <g transform="translate(25,30)">
+      <rect x="0" y="0" width="120" height="120" fill="#fff" stroke="#c2c2c2"/>
+      <rect x="40" y="40" width="40" height="40" fill="#fde6c8"/>
+      <g stroke="#c2c2c2"><line x1="40" y1="0" x2="40" y2="120"/><line x1="80" y1="0" x2="80" y2="120"/><line x1="0" y1="40" x2="120" y2="40"/><line x1="0" y1="80" x2="120" y2="80"/></g>
+      <text x="20" y="25">52</text><text x="60" y="25">55</text><text x="100" y="25">61</text>
+      <text x="20" y="65">59</text><text x="60" y="65" font-weight="700">90</text><text x="100" y="65">62</text>
+      <text x="20" y="105">58</text><text x="60" y="105">60</text><text x="100" y="105">63</text>
+    </g>
+    <text x="185" y="95" font-size="22" fill="#5f6b7a">×</text>
+    <text x="285" y="18" font-weight="600" fill="#1f3a5f">Sharpen kernel</text>
+    <g transform="translate(225,30)">
+      <rect x="0" y="0" width="120" height="120" fill="#eef3f9" stroke="#257de0"/>
+      <g stroke="#9dc8f7"><line x1="40" y1="0" x2="40" y2="120"/><line x1="80" y1="0" x2="80" y2="120"/><line x1="0" y1="40" x2="120" y2="40"/><line x1="0" y1="80" x2="120" y2="80"/></g>
+      <text x="20" y="25">0</text><text x="60" y="25">−1</text><text x="100" y="25">0</text>
+      <text x="20" y="65">−1</text><text x="60" y="65" font-weight="700">5</text><text x="100" y="65">−1</text>
+      <text x="20" y="105">0</text><text x="60" y="105">−1</text><text x="100" y="105">0</text>
+    </g>
+    <text x="385" y="95" font-size="22" fill="#5f6b7a">=</text>
+    <text x="520" y="18" font-weight="600" fill="#1f3a5f">New centre value</text>
+    <g transform="translate(420,30)" text-anchor="start" font-size="12.5" fill="#1f2328">
+      <text x="0" y="22">5 × 90</text>
+      <text x="0" y="44">− (55 + 59 + 62 + 60)</text>
+      <text x="0" y="66">= 450 − 236</text>
+      <text x="0" y="96" font-size="20" font-weight="700" fill="#1f3a5f">= 214</text>
+      <text x="0" y="118" fill="#5f6b7a" font-size="11.5">90 became 214: the bright spot is boosted</text>
+    </g>
+  </g>
+  <text x="320" y="190" text-anchor="middle" font-size="11.5" fill="#5f6b7a">Weights multiply the pixels under them; the products are added; the sum replaces the centre pixel.</text>
+</svg>
+<figcaption><b>Diagram 1.</b> One step of convolution with the sharpen kernel, worked out by hand.</figcaption>
+</figure>
+<p><b>What the diagram shows.</b> The orange cell (90) is the pixel being processed; the eight cells around it are its neighbours. The sharpen kernel gives the centre a weight of 5 and subtracts each of the four direct neighbours once. Because the centre is brighter than its neighbours, the result (214) is even brighter: sharpening <em>exaggerates differences</em>. In a flat area, where all nine pixels are equal, the result equals the original pixel, because the weights add up to 1 (5 − 4 = 1).</p>
+<p><b>Borders.</b> At the edge of the image some neighbours don’t exist. We use the <b>replicate border</b> rule: a missing neighbour copies the nearest real edge pixel. The <b>radius</b> of a kernel is how far it reaches from the centre: 1 for a 3 × 3 kernel, 2 for a 5 × 5 kernel.</p>
+<div class="callout"><b class="t">In simple words</b><p>Convolution = for every pixel, take a weighted average (or weighted difference) of its neighbourhood. The kernel decides the weights.</p></div>
+
+<h2><span class="n">3</span>Our three filters</h2>
+<table>
+  <tr><th style="width:17%">Filter</th><th style="width:28%">Kernel</th><th>What it does, in simple words</th></tr>
+  <tr><td><b>Gaussian blur</b><br>5 × 5</td><td>weights 1-4-6-4-1 in each direction (centre heaviest), total 256, so we divide by 256</td><td>A weighted average of the neighbourhood: smooths noise and softens detail. Near pixels count more than far ones.</td></tr>
+  <tr><td><b>Sharpen</b><br>3 × 3</td><td>centre 5, four neighbours −1</td><td>Boosts a pixel relative to its neighbours, so fine texture and edges stand out. Results are clamped to 0–255.</td></tr>
+  <tr><td><b>Sobel edge detection</b><br>two 3 × 3 kernels</td><td>G<sub>x</sub>: left −, right +;  G<sub>y</sub>: top −, bottom +</td><td>G<sub>x</sub> measures how fast brightness changes left→right, G<sub>y</sub> top→bottom. Edge strength = √(G<sub>x</sub>² + G<sub>y</sub>²). Flat areas become black, edges become white.</td></tr>
+</table>
+<p><b>A Sobel example.</b> Take a neighbourhood with a dark left side and a bright right side: columns 10, 10, 200. G<sub>x</sub> = (200 − 10) + 2·(200 − 10) + (200 − 10) = 760, which we clamp to 255: a strong white edge. On a flat patch (all 10s) both G<sub>x</sub> and G<sub>y</sub> are 0, so the output is black.</p>
+<p>Two implementation details matter later. First, <b>all weights are integers</b>, so the arithmetic is exact: no rounding drift, and the result is identical no matter which computer, thread or process computes it. Second, we compute <b>all three filters in one pass</b>: for each pixel we fetch its neighbourhood once and produce the blurred, sharpened and edge values together.</p>
+
+<h2><span class="n">4</span>Parallel computing in one page</h2>
+<p><b>Sequential</b> means one worker does all the work, one step after another. <b>Parallel</b> means several workers do parts of the work <em>at the same time</em>. The goal is to finish sooner.</p>
+<div class="terms">
+  <div class="term"><b>Core</b><span>One independent processing unit inside the CPU. Our laptop (Intel i7-8565U) has <b>4 physical cores</b>.</span></div>
+  <div class="term"><b>Hyper-threading</b><span>Intel lets each core run <b>2 hardware threads</b>, so Windows sees 8 “logical processors”. But the two threads <em>share</em> one core, so 8 threads ≠ 8 cores.</span></div>
+  <div class="term"><b>Process</b><span>A running program with its <b>own private memory</b>. Two processes cannot see each other’s variables; they must send messages.</span></div>
+  <div class="term"><b>Thread</b><span>A worker <em>inside</em> a process. All threads of a process <b>share the same memory</b>, so they can read the same image directly.</span></div>
+  <div class="term"><b>Shared memory</b><span>Many threads, one memory. Fast and simple, but limited to one machine. Tool: <b>OpenMP</b>.</span></div>
+  <div class="term"><b>Distributed memory</b><span>Many processes, each with its own memory, possibly on different machines, cooperating by messages. Tool: <b>MPI</b>.</span></div>
+  <div class="term"><b>Race condition</b><span>A bug where two threads update the same variable at the same time and one update is lost. Avoided with reductions, atomics or critical sections.</span></div>
+  <div class="term"><b>Synchronisation</b><span>Making workers wait for each other at agreed points (for example a barrier). Necessary, but waiting is time not spent working.</span></div>
+</div>
+<figure>
+<svg viewBox="0 0 640 175" width="640" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, sans-serif" font-size="12">
+  <text x="150" y="16" text-anchor="middle" font-weight="600" fill="#1f3a5f">OpenMP: one process, many threads</text>
+  <rect x="20" y="28" width="260" height="130" rx="8" fill="#fff" stroke="#1f3a5f" stroke-width="1.5"/>
+  <rect x="40" y="110" width="220" height="34" rx="5" fill="#eef3f9" stroke="#257de0"/>
+  <text x="150" y="132" text-anchor="middle" fill="#1f3a5f">ONE shared memory (the image is here)</text>
+  <g fill="#257de0">
+    <rect x="45" y="45" width="40" height="30" rx="4"/><rect x="105" y="45" width="40" height="30" rx="4"/>
+    <rect x="165" y="45" width="40" height="30" rx="4"/><rect x="225" y="45" width="30" height="30" rx="4" opacity=".5"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-size="11"><text x="65" y="64">T0</text><text x="125" y="64">T1</text><text x="185" y="64">T2</text><text x="240" y="64">…</text></g>
+  <g stroke="#5f6b7a" stroke-width="1.2"><line x1="65" y1="76" x2="65" y2="109"/><line x1="125" y1="76" x2="125" y2="109"/><line x1="185" y1="76" x2="185" y2="109"/></g>
+
+  <text x="470" y="16" text-anchor="middle" font-weight="600" fill="#1f3a5f">MPI: many processes, separate memories</text>
+  <g>
+    <rect x="330" y="28" width="90" height="130" rx="8" fill="#fff" stroke="#257de0" stroke-width="1.5"/>
+    <rect x="425" y="28" width="90" height="130" rx="8" fill="#fff" stroke="#f47230" stroke-width="1.5"/>
+    <rect x="520" y="28" width="100" height="130" rx="8" fill="#fff" stroke="#00b894" stroke-width="1.5"/>
+    <g text-anchor="middle"><text x="375" y="50" font-weight="600">Rank 0</text><text x="470" y="50" font-weight="600">Rank 1</text><text x="570" y="50" font-weight="600">Rank 2</text></g>
+    <g fill="#f2f5f9" stroke="#c2c2c2"><rect x="340" y="110" width="70" height="34" rx="4"/><rect x="435" y="110" width="70" height="34" rx="4"/><rect x="530" y="110" width="80" height="34" rx="4"/></g>
+    <g text-anchor="middle" font-size="10.5" fill="#5f6b7a"><text x="375" y="131">own memory</text><text x="470" y="131">own memory</text><text x="570" y="131">own memory</text></g>
+    <g stroke="#1f3a5f" stroke-width="1.3" fill="none" marker-end="url(#ah)"><path d="M392 78 Q 422 64 452 78"/><path d="M487 78 Q 517 64 547 78"/></g>
+    <text x="470" y="92" text-anchor="middle" font-size="10.5" fill="#1f3a5f">messages</text>
+  </g>
+  <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1f3a5f"/></marker></defs>
+</svg>
+<figcaption><b>Diagram 2.</b> Threads share one memory; processes each have their own memory and must exchange messages.</figcaption>
+</figure>
+<p><b>What the diagram shows.</b> On the left, threads T0, T1, T2 all point to the same memory, so any thread can read the whole image. On the right, each MPI process (called a <b>rank</b>) has a private memory. If rank 1 needs data that rank 0 has, rank 0 must <em>send</em> it. Sending data costs time; this cost is called <b>communication overhead</b>.</p>
+
+<h2><span class="n">5</span>OpenMP: threads that share memory</h2>
+<p><b>OpenMP</b> is a standard for shared-memory parallelism in C/C++. You add <b>pragmas</b> (special compiler instructions that start with <code>#pragma omp</code>) to ordinary code, and the compiler (with the <code>-fopenmp</code> flag) creates and manages the threads for you.</p>
+<table>
+  <tr><th style="width:30%">Construct</th><th>Meaning</th><th style="width:26%">Where we use it</th></tr>
+  <tr><td><code>#pragma omp parallel for</code></td><td>Split the iterations of the next loop among the threads.</td><td>loop over rows, or over images</td></tr>
+  <tr><td><code>schedule(static)</code></td><td>Cut the loop into equal blocks <em>before</em> starting; thread 0 gets the first block, and so on.</td><td>default; ideal when every iteration costs the same</td></tr>
+  <tr><td><code>schedule(dynamic, chunk)</code></td><td>Threads grab the next small chunk when they finish one. Better when iterations have uneven cost, but adds overhead.</td><td>tested at 8 threads</td></tr>
+  <tr><td><code>schedule(runtime)</code></td><td>Decide static or dynamic when the program runs (we pass it on the command line).</td><td>all our loops</td></tr>
+  <tr><td><code>reduction(+ : x)</code></td><td>Every thread gets a private copy of <code>x</code>; at the end the copies are added together. Race-free summing.</td><td>checksum and timing totals</td></tr>
+  <tr><td><code>#pragma omp critical</code></td><td>Only one thread at a time may run this block (a lock).</td><td>saving an error message</td></tr>
+  <tr><td><code>#pragma omp atomic</code></td><td>A single update (like <code>++count</code>) done indivisibly, cheaper than critical.</td><td>shared progress counter</td></tr>
+  <tr><td>implicit barrier</td><td>At the end of a parallel loop, all threads wait until everyone is finished.</td><td>end of each image in rows mode</td></tr>
+</table>
+<div class="callout viva"><b class="t">Viva tip</b><p>Why use a <code>reduction</code> for the checksum and not <code>atomic</code>? With atomic, every thread would update the same shared variable 10,000 times and they would queue up at that one variable. A reduction gives each thread its own private copy and adds the copies <em>once</em> at the end: correct and faster.</p></div>
+
+<h2><span class="n">6</span>MPI: processes that send messages</h2>
+<p><b>MPI (Message Passing Interface)</b> is a standard library for distributed-memory programs. You start several copies of the same program with <code>mpiexec -n P program.exe</code>. Each copy is a <b>process</b> with a number, its <b>rank</b> (0 … P−1). The group of all processes is the <b>communicator</b> <code>MPI_COMM_WORLD</code>, and its size is P. Rank 0 usually acts as the coordinator (the “root”). We use Microsoft’s implementation, <b>MS-MPI</b>.</p>
+<p>There are two kinds of communication. <b>Point-to-point</b> communication is between two specific processes (send/receive). <b>Collective</b> communication involves every process in the communicator at once.</p>
+<figure>
+<svg viewBox="0 0 640 190" width="640" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, sans-serif" font-size="11.5">
+  <defs><marker id="a2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#5f6b7a"/></marker></defs>
+  <!-- Bcast -->
+  <g transform="translate(10,10)">
+    <text x="70" y="12" text-anchor="middle" font-weight="700" fill="#1f3a5f">MPI_Bcast</text>
+    <rect x="45" y="22" width="50" height="22" rx="4" fill="#257de0"/><text x="70" y="37" text-anchor="middle" fill="#fff">A</text>
+    <g stroke="#5f6b7a" marker-end="url(#a2)"><line x1="60" y1="46" x2="25" y2="88"/><line x1="70" y1="46" x2="70" y2="88"/><line x1="80" y1="46" x2="115" y2="88"/></g>
+    <g fill="#257de0"><rect x="5" y="90" width="40" height="22" rx="4"/><rect x="50" y="90" width="40" height="22" rx="4"/><rect x="95" y="90" width="40" height="22" rx="4"/></g>
+    <g fill="#fff" text-anchor="middle"><text x="25" y="105">A</text><text x="70" y="105">A</text><text x="115" y="105">A</text></g>
+    <text x="70" y="135" text-anchor="middle" fill="#5f6b7a">root sends the SAME</text><text x="70" y="150" text-anchor="middle" fill="#5f6b7a">data to everyone</text>
+  </g>
+  <!-- Scatter -->
+  <g transform="translate(170,10)">
+    <text x="70" y="12" text-anchor="middle" font-weight="700" fill="#1f3a5f">MPI_Scatter(v)</text>
+    <rect x="25" y="22" width="30" height="22" fill="#257de0"/><rect x="55" y="22" width="30" height="22" fill="#f47230"/><rect x="85" y="22" width="30" height="22" fill="#00b894"/>
+    <g stroke="#5f6b7a" marker-end="url(#a2)"><line x1="40" y1="46" x2="25" y2="88"/><line x1="70" y1="46" x2="70" y2="88"/><line x1="100" y1="46" x2="115" y2="88"/></g>
+    <rect x="10" y="90" width="30" height="22" fill="#257de0"/><rect x="55" y="90" width="30" height="22" fill="#f47230"/><rect x="100" y="90" width="30" height="22" fill="#00b894"/>
+    <text x="70" y="135" text-anchor="middle" fill="#5f6b7a">root splits data, each</text><text x="70" y="150" text-anchor="middle" fill="#5f6b7a">rank gets its OWN piece</text>
+  </g>
+  <!-- Gather -->
+  <g transform="translate(330,10)">
+    <text x="70" y="12" text-anchor="middle" font-weight="700" fill="#1f3a5f">MPI_Gather(v)</text>
+    <rect x="10" y="22" width="30" height="22" fill="#257de0"/><rect x="55" y="22" width="30" height="22" fill="#f47230"/><rect x="100" y="22" width="30" height="22" fill="#00b894"/>
+    <g stroke="#5f6b7a" marker-end="url(#a2)"><line x1="25" y1="46" x2="40" y2="88"/><line x1="70" y1="46" x2="70" y2="88"/><line x1="115" y1="46" x2="100" y2="88"/></g>
+    <rect x="25" y="90" width="30" height="22" fill="#257de0"/><rect x="55" y="90" width="30" height="22" fill="#f47230"/><rect x="85" y="90" width="30" height="22" fill="#00b894"/>
+    <text x="70" y="135" text-anchor="middle" fill="#5f6b7a">pieces from every rank</text><text x="70" y="150" text-anchor="middle" fill="#5f6b7a">are collected at root</text>
+  </g>
+  <!-- Reduce -->
+  <g transform="translate(490,10)">
+    <text x="70" y="12" text-anchor="middle" font-weight="700" fill="#1f3a5f">MPI_Reduce (SUM)</text>
+    <g fill="#eef3f9" stroke="#257de0"><rect x="5" y="22" width="40" height="22" rx="4"/><rect x="50" y="22" width="40" height="22" rx="4"/><rect x="95" y="22" width="40" height="22" rx="4"/></g>
+    <g text-anchor="middle"><text x="25" y="37">3</text><text x="70" y="37">5</text><text x="115" y="37">2</text></g>
+    <g stroke="#5f6b7a" marker-end="url(#a2)"><line x1="25" y1="46" x2="60" y2="88"/><line x1="70" y1="46" x2="70" y2="88"/><line x1="115" y1="46" x2="80" y2="88"/></g>
+    <rect x="45" y="90" width="50" height="22" rx="4" fill="#1f3a5f"/><text x="70" y="105" text-anchor="middle" fill="#fff">10</text>
+    <text x="70" y="135" text-anchor="middle" fill="#5f6b7a">values are combined</text><text x="70" y="150" text-anchor="middle" fill="#5f6b7a">(here added) at root</text>
+  </g>
+  <text x="320" y="182" text-anchor="middle" fill="#5f6b7a" font-size="11">The “v” versions (Scatterv, Gatherv) allow pieces of different sizes.</text>
+</svg>
+<figcaption><b>Diagram 3.</b> The four collective operations we use. The top row is the situation before the call, the bottom row after it.</figcaption>
+</figure>
+<table>
+  <tr><th style="width:27%">MPI call</th><th>What it does</th><th style="width:28%">Our use</th></tr>
+  <tr><td><code>MPI_Init_thread</code> / <code>MPI_Finalize</code></td><td>Start and stop MPI; the “thread” version also says whether threads will be used.</td><td>start of every MPI program</td></tr>
+  <tr><td><code>MPI_Comm_rank</code> / <code>_size</code></td><td>“Who am I?” and “how many of us are there?”</td><td>decides each rank’s share</td></tr>
+  <tr><td><code>MPI_Bcast</code></td><td>One-to-all copy.</td><td>file list; image size</td></tr>
+  <tr><td><code>MPI_Scatterv</code> / <code>MPI_Gatherv</code></td><td>Split / collect, pieces may differ in size.</td><td>image strips</td></tr>
+  <tr><td><code>MPI_Reduce</code></td><td>Combine values from all ranks with an operation (SUM).</td><td>add up checksums</td></tr>
+  <tr><td><code>MPI_Sendrecv</code></td><td>Send to one rank and receive from another <em>in one call</em>. Safe against deadlock.</td><td>halo exchange</td></tr>
+  <tr><td><code>MPI_PROC_NULL</code></td><td>A “nobody” rank: sending to it or receiving from it does nothing.</td><td>top and bottom strips have no neighbour</td></tr>
+  <tr><td><code>MPI_Barrier</code> / <code>MPI_Wtime</code></td><td>Everyone waits until all arrive; a high-resolution clock.</td><td>start the timer together</td></tr>
+  <tr><td><code>MPI_Abort</code></td><td>Kill all ranks (used on fatal errors).</td><td>if an image cannot be read</td></tr>
+</table>
+<div class="terms">
+  <div class="term"><b>Deadlock</b><span>Every process is waiting for another one, so nobody ever proceeds. Example: two ranks both call a blocking <em>send</em> first and both wait for the other to receive.</span></div>
+  <div class="term"><b>Busy-waiting (polling)</b><span>A waiting MPI process that keeps checking “has my message arrived?” in a loop instead of sleeping. It burns CPU while doing no useful work. MS-MPI does this by default.</span></div>
+</div>
+
+<h2><span class="n">7</span>Hybrid MPI + OpenMP</h2>
+<p><b>Hybrid</b> means using both at once: several MPI processes, and inside each process several OpenMP threads. We write it as <b>P × T</b> (processes × threads); the total number of workers is P × T. For example, 2 × 4 means two processes with four threads each, so 8 workers.</p>
+<p>Why bother? On a real cluster, each machine (node) has many cores that share memory, and the machines are connected by a network. The natural design is <b>one MPI process per machine</b> (for communication between machines) plus <b>OpenMP threads inside each machine</b> (to use its cores without sending messages). Fewer processes means fewer messages.</p>
+<p>When threads live inside an MPI program, MPI must be told how threads will call it. This is the <b>thread support level</b>:</p>
+<ul>
+  <li><code>MPI_THREAD_SINGLE</code>: no threads at all.</li>
+  <li><code>MPI_THREAD_FUNNELED</code>: threads exist, but <b>only the main thread calls MPI</b>. <b>This is what we use.</b></li>
+  <li><code>MPI_THREAD_SERIALIZED</code>: any thread may call MPI, but only one at a time.</li>
+  <li><code>MPI_THREAD_MULTIPLE</code>: any thread, any time. Most flexible, but slowest.</li>
+</ul>
+<p>FUNNELED is enough for us because all our MPI calls happen <em>outside</em> the OpenMP parallel loops, so only the main thread ever talks to MPI. It is also the cheapest level that is still correct.</p>
+
+<h2><span class="n">8</span>Splitting the work: decomposition, granularity, load balance</h2>
+<div class="terms">
+  <div class="term"><b>Decomposition</b><span>Deciding how to divide the problem into pieces for the workers. We divide the <em>data</em> (images or rows): this is <b>data decomposition</b>.</span></div>
+  <div class="term"><b>Granularity</b><span>The size of each piece. <b>Coarse-grained</b> = big pieces (whole images). <b>Fine-grained</b> = small pieces (rows or strips of one image).</span></div>
+  <div class="term"><b>Load balancing</b><span>Making sure every worker gets about the same amount of work, so nobody finishes early and sits idle.</span></div>
+  <div class="term"><b>Block partitioning</b><span>Give each worker one contiguous block. 10,000 images ÷ 8 ranks = 1,250 each. If it doesn’t divide evenly, the first few get one extra (sizes differ by at most 1).</span></div>
+</div>
+<div class="callout"><b class="t">The rule of thumb</b><p>Coarse-grained pieces mean less coordination and less communication, which makes them usually faster. Fine-grained pieces are needed when one piece is too big for one worker, for example a single huge image. Our results prove this rule on real data.</p></div>
+
+<h2><span class="n">9</span>Halo rows (also called ghost rows)</h2>
+<p>Suppose we split one image into horizontal <b>strips</b> and give each strip to a different MPI process. To blur a pixel in the top row of its strip, a process needs the 2 rows <em>above</em> it (the 5 × 5 kernel has radius 2). But those rows belong to the neighbouring process, in a different memory! The solution is for each process to keep 2 extra rows above and 2 below its strip. These extra rows are called the <b>halo</b>, and they are copied from the neighbours before filtering. That copying step is the <b>halo exchange</b>.</p>
+<figure>
+<svg viewBox="0 0 640 230" width="640" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, sans-serif" font-size="12">
+  <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1f3a5f"/></marker></defs>
+  <text x="120" y="16" text-anchor="middle" font-weight="600" fill="#1f3a5f">The full image</text>
+  <rect x="40" y="26" width="160" height="62" fill="#257de0"/><text x="120" y="62" text-anchor="middle" fill="#fff">rank 0 rows</text>
+  <rect x="40" y="90" width="160" height="62" fill="#f47230"/><text x="120" y="126" text-anchor="middle" fill="#fff">rank 1 rows</text>
+  <rect x="40" y="154" width="160" height="62" fill="#00b894"/><text x="120" y="190" text-anchor="middle" fill="#fff">rank 2 rows</text>
+
+  <text x="485" y="16" text-anchor="middle" font-weight="600" fill="#1f3a5f">What rank 1 keeps in its memory</text>
+  <rect x="350" y="34" width="270" height="22" fill="#257de0" opacity=".45"/><text x="485" y="49" text-anchor="middle" fill="#0b2d55" font-size="11">2 halo rows: copy of rank 0’s last rows (read-only)</text>
+  <rect x="350" y="58" width="270" height="110" fill="#f47230"/><text x="485" y="110" text-anchor="middle" fill="#fff" font-weight="600">rank 1’s own rows</text><text x="485" y="127" text-anchor="middle" fill="#fff" font-size="11">(these it computes)</text>
+  <rect x="350" y="170" width="270" height="22" fill="#00b894" opacity=".45"/><text x="485" y="185" text-anchor="middle" fill="#00473a" font-size="11">2 halo rows: copy of rank 2’s first rows (read-only)</text>
+  <g stroke="#1f3a5f" stroke-width="1.4" fill="none" marker-end="url(#a3)"><path d="M202 82 C 260 76, 300 46, 346 45"/><path d="M202 160 C 260 166, 300 182, 346 181"/></g>
+  <text x="262" y="96" text-anchor="middle" font-size="10.5" fill="#1f3a5f">MPI_Sendrecv</text><text x="262" y="150" text-anchor="middle" font-size="10.5" fill="#1f3a5f">MPI_Sendrecv</text>
+</svg>
+<figcaption><b>Diagram 4.</b> Halo rows: each strip borrows 2 boundary rows from each neighbour so that edge pixels can be filtered correctly.</figcaption>
+</figure>
+<p><b>What the diagram shows.</b> Rank 1 owns the orange rows. Before filtering it receives a copy of the last 2 rows of rank 0 and the first 2 rows of rank 2. It only <em>reads</em> the halo rows and never computes outputs for them. Rank 0 (top) has no neighbour above and rank 2 (bottom) none below; for them we use <code>MPI_PROC_NULL</code>, so that half of the exchange simply does nothing.</p>
+<p><b>Why <code>MPI_Sendrecv</code>?</b> If every rank first did a blocking “send down” and then “receive from up”, they could all be stuck sending with nobody receiving: a <b>deadlock</b>. <code>MPI_Sendrecv</code> performs the send and the receive together, so MPI can always complete the exchange.</p>
+
+<h2><span class="n">10</span>Measuring performance: speedup, efficiency, Amdahl’s law</h2>
+<div class="terms">
+  <div class="term"><b>Execution time (T)</b><span>Wall-clock seconds from start to finish. T<sub>seq</sub> is the sequential time, T<sub>par</sub> the parallel time.</span></div>
+  <div class="term"><b>Speedup S = T<sub>seq</sub> / T<sub>par</sub></b><span>How many times faster. 195 s → 55 s gives S = 3.5×. The ideal with N workers is N×.</span></div>
+  <div class="term"><b>Efficiency E = S / N</b><span>How well each worker is used. 3.5× with 8 workers gives E = 44%; with 2 workers, 1.89× gives 95%.</span></div>
+  <div class="term"><b>Overhead</b><span>Extra work that only exists because we went parallel: communication, waiting, creating threads, combining results.</span></div>
+</div>
+<h3>Amdahl’s law: the most important idea in this project</h3>
+<p>If a fraction <b>f</b> of the work <em>cannot</em> be parallelised (it must run on one worker), then even with infinitely many workers the run can never be faster than that serial part. The maximum speedup is</p>
+<p class="center" style="font-size:12pt">S<sub>max</sub> = 1 / f      and with N workers:   S(N) = 1 / ( f + (1 − f) / N )</p>
+<figure>
+<svg viewBox="0 0 640 170" width="640" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, sans-serif" font-size="11.5">
+  <text x="10" y="30" fill="#1f3a5f" font-weight="600">1 worker</text>
+  <rect x="120" y="16" width="219" height="24" fill="#6a4ce2"/><text x="229" y="33" text-anchor="middle" fill="#fff">read 85.5 s (serial)</text>
+  <rect x="341" y="16" width="266" height="24" fill="#008a17"/><text x="474" y="33" text-anchor="middle" fill="#fff">compute 103.7 s</text>
+  <text x="10" y="76" fill="#1f3a5f" font-weight="600">4 workers</text>
+  <rect x="120" y="62" width="219" height="24" fill="#6a4ce2"/><text x="229" y="79" text-anchor="middle" fill="#fff">read 85.5 s (still serial!)</text>
+  <rect x="341" y="62" width="66" height="24" fill="#008a17"/><text x="374" y="79" text-anchor="middle" fill="#fff">÷4</text>
+  <text x="10" y="122" fill="#1f3a5f" font-weight="600">∞ workers</text>
+  <rect x="120" y="108" width="219" height="24" fill="#6a4ce2"/><text x="229" y="125" text-anchor="middle" fill="#fff">read 85.5 s</text>
+  <rect x="341" y="108" width="3" height="24" fill="#008a17"/>
+  <text x="352" y="125" fill="#5f6b7a">→ never below 85.5 s, so at most 195.1 / 85.5 = 2.28×</text>
+  <text x="320" y="160" text-anchor="middle" fill="#5f6b7a" font-size="11">Bar length = time. Only the green part shrinks when workers are added.</text>
+</svg>
+<figcaption><b>Diagram 5.</b> Amdahl’s law with our real numbers, for a version in which only one worker reads the images.</figcaption>
+</figure>
+<p><b>What the diagram shows.</b> In our sequential run, reading/decoding takes 85.5 s and filtering 103.7 s, so the read is f = 85.5 / 195.1 = <b>44%</b> of the time. If a version parallelises only the filtering (the green bar), the purple bar never shrinks, and the speedup can never exceed <b>2.28×</b>, no matter how many cores. The fix is to parallelise the reading too. That is exactly why some of our versions reach 3.5× and others are stuck near 1.5×.</p>
+<div class="callout remember"><b class="t">Remember</b><p>A parallel program is only as fast as its slowest serial part. Always find out where the time goes <em>before</em> parallelising. We measured read, compute and communication time separately for exactly this reason.</p></div>
+
+<!-- ======================================================================= PART 2 -->
+<h1><span class="part">PART 2</span>Our project, step by step</h1>
+<p class="intro">Now that the vocabulary is clear, here is what we built, piece by piece, and how the pieces fit together.</p>
+
+<h2><span class="n">11</span>The goal in one picture</h2>
+<p><b>Task:</b> take 10,000 chest X-rays and, for every one, produce a blurred, a sharpened and an edge-detected version, as fast as possible on a multi-core computer. The output of every parallel version must be <em>exactly</em> the same as the simple sequential version.</p>
+<figure>
+<svg viewBox="0 0 640 110" width="640" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, sans-serif" font-size="12">
+  <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5f6b7a"/></marker></defs>
+  <g text-anchor="middle">
+    <rect x="5" y="30" width="105" height="48" rx="6" fill="#fff" stroke="#c2c2c2"/><text x="57" y="51" font-weight="600">PNG file</text><text x="57" y="67" font-size="10.5" fill="#5f6b7a">on disk</text>
+    <rect x="140" y="30" width="110" height="48" rx="6" fill="#6a4ce2"/><text x="195" y="51" fill="#fff" font-weight="600">Read + decode</text><text x="195" y="67" fill="#fff" font-size="10.5">OpenCV imread</text>
+    <rect x="280" y="22" width="130" height="64" rx="6" fill="#008a17"/><text x="345" y="45" fill="#fff" font-weight="600">Filter (our code)</text><text x="345" y="62" fill="#fff" font-size="10.5">blur + sharpen + edges</text><text x="345" y="76" fill="#fff" font-size="10.5">in one pass</text>
+    <rect x="440" y="30" width="95" height="48" rx="6" fill="#257de0"/><text x="487" y="51" fill="#fff" font-weight="600">Checksum</text><text x="487" y="67" fill="#fff" font-size="10.5">fingerprint</text>
+    <rect x="560" y="30" width="75" height="48" rx="6" fill="#fff" stroke="#c2c2c2" stroke-dasharray="4 3"/><text x="597" y="51" font-weight="600">Save</text><text x="597" y="67" font-size="10.5" fill="#5f6b7a">first few only</text>
+  </g>
+  <g stroke="#5f6b7a" stroke-width="1.4" marker-end="url(#a4)"><line x1="111" y1="54" x2="137" y2="54"/><line x1="251" y1="54" x2="277" y2="54"/><line x1="411" y1="54" x2="437" y2="54"/><line x1="536" y1="54" x2="557" y2="54"/></g>
+  <text x="320" y="104" text-anchor="middle" fill="#5f6b7a" font-size="11">This pipeline runs 10,000 times. The versions differ only in WHO does which part, and WHEN.</text>
+</svg>
+<figcaption><b>Diagram 6.</b> What happens to every image.</figcaption>
+</figure>
+<p><b>What the diagram shows.</b> Each image goes through four steps. Reading/decoding uses OpenCV (allowed by our proposal, for input/output only). The filtering is <b>our own hand-written code</b>, which is the part the course cares about. The checksum is a fingerprint used to prove correctness (Section 16). Saving is done only for a few images, because writing 30,000 files would turn the experiment into a disk benchmark.</p>
+<figure>
+  <img src="../../report/figures/sample_filters.png" style="width:92%">
+  <figcaption><b>Figure 1.</b> A real X-ray from our dataset and our three outputs. The bottom row zooms into the yellow box.</figcaption>
+</figure>
+<p><b>How to read Figure 1.</b> Compare the bottom row. The blur is smoother (the grain disappears), the sharpened image is crisper but also noisier (sharpening amplifies noise as well as detail), and the Sobel image keeps only the outlines (the heart border, vessels and ribs) with everything flat turned black.</p>
+
+<h2><span class="n">12</span>The dataset</h2>
+<table>
+  <tr><th style="width:30%">Fact</th><th>Value</th></tr>
+  <tr><td>Name and source</td><td><b>NIH ChestX-ray14</b>, released by the US National Institutes of Health Clinical Center (Wang et al., CVPR 2017). 112,120 images in total.</td></tr>
+  <tr><td>What we downloaded</td><td>The first 2 of 12 archives: 14,999 images, verified with SHA-256 checksums (stored on drive E:).</td></tr>
+  <tr><td>What we process</td><td>The first <b>10,000</b> images in file-name order, from 2,587 patients; 3.98 GB of PNG files.</td></tr>
+  <tr><td>Image format</td><td>1024 × 1024 pixels, 8-bit grayscale (about 1% are stored with colour channels; we convert them to gray when loading).</td></tr>
+  <tr><td>Total work</td><td>10.5 billion pixels; 52 multiply–adds per pixel (25 blur + 9 sharpen + 18 Sobel), about 545 billion operations.</td></tr>
+</table>
+<p><b>Why this dataset?</b> It is <b>large</b> (the sequential version takes over 3 minutes, so speedups are clearly measurable), <b>uniform</b> (every image is the same size, so differences in time come from our parallel strategy, not from uneven images), <b>real</b> (blur, sharpen and edge detection are genuinely used on X-rays) and <b>single</b> (one dataset, one domain, which our group wanted, and which no other group uses). The disease labels in the dataset are not used: we do image processing, not classification.</p>
+<div class="callout viva"><b class="t">Viva tip</b><p>“Why 10,000 and not all 15,000?” The proposal promised at least 10,000. That is already large enough for clear measurements, and it keeps one full benchmark pass under an hour. The extra 5,000 images are kept as spare data.</p></div>
+
+<h2><span class="n">13</span>Tools and why we chose them</h2>
+<table>
+  <tr><th style="width:24%">Tool</th><th>What it is / why</th></tr>
+  <tr><td><b>C++20</b></td><td>Fast, low-level control over memory; the standard language for OpenMP and MPI.</td></tr>
+  <tr><td><b>g++ 16.2</b> (MSYS2)</td><td>The GNU compiler on Windows. Flags: <code>-O3</code> (strong optimisation), <code>-march=native</code> (use every instruction our CPU supports), <code>-fopenmp</code> (enable OpenMP).</td></tr>
+  <tr><td><b>OpenMP</b></td><td>Shared-memory threads, built into the compiler.</td></tr>
+  <tr><td><b>MS-MPI 10.1</b></td><td>Microsoft’s MPI implementation for Windows; provides <code>mpiexec</code>.</td></tr>
+  <tr><td><b>OpenCV 5.0</b></td><td>Used <b>only</b> to read and write PNG files (<code>imread</code>/<code>imwrite</code>). We do <em>not</em> use its filters, because the course is about parallelising the computation ourselves.</td></tr>
+  <tr><td><b>PowerShell scripts</b></td><td><code>build.ps1</code> (compile everything with one command), <code>run.ps1</code> (run with or without mpiexec), <code>benchmark.ps1</code> (run all experiments).</td></tr>
+  <tr><td><b>Python</b> (matplotlib)</td><td>Only for the graphs. It is not part of the timed programs.</td></tr>
+</table>
+
+<h2><span class="n">14</span>The programs we wrote</h2>
+<p>All programs share one folder of common code (<code>src/common</code>): the kernels, the <b>single convolution function</b> <code>filter_row</code>, image loading, the partitioning helper, the checksum, the timers and the command-line options. On top of it sit five programs:</p>
+<table>
+  <tr><th style="width:20%">Program</th><th style="width:26%">Parallel model</th><th>Idea</th></tr>
+  <tr><td><code>sequential</code></td><td>none (1 core)</td><td>The baseline: read, filter, checksum, one image after another.</td></tr>
+  <tr><td><code>openmp --mode rows</code></td><td>OpenMP, fine-grained</td><td>Threads share the 1,024 rows of each image. Reading stays on one thread.</td></tr>
+  <tr><td><code>openmp --mode images</code></td><td>OpenMP, coarse-grained</td><td>Threads share the list of images; each reads and filters whole images.</td></tr>
+  <tr><td><code>mpi_batch</code></td><td>MPI or hybrid, coarse-grained</td><td>Each process gets a block of whole images; inside it, T threads share that block.</td></tr>
+  <tr><td><code>mpi_strips</code></td><td>MPI or hybrid, fine-grained</td><td>Every image is cut into strips, one per process, with halo exchange; inside each process, T threads share the strip’s rows.</td></tr>
+</table>
+<p>The MPI programs take <code>--threads T</code>. With T = 1 they are pure MPI; with T &gt; 1 they are hybrid. So <b>one program covers both MPI and hybrid</b>. There are also two test programs (<code>test_common</code>, <code>validate_opencv</code>).</p>
+
+<h2><span class="n">15</span>How each parallel version works</h2>
+<h3>OpenMP rows mode (fine-grained, shared memory)</h3>
+<p>The main thread reads image 1. Then <code>#pragma omp parallel for</code> splits its 1,024 rows among the threads; each thread writes only its own output rows, so no locks are needed. At the end of the loop there is an implicit barrier: everyone waits, and then the main thread reads image 2. <b>Weakness:</b> while one thread reads, the others sit idle. Reading is the serial part from Amdahl’s law.</p>
+<h3>OpenMP images mode (coarse-grained, shared memory)</h3>
+<p>The parallel loop runs over the 10,000 images instead. Each thread reads, decodes, filters and fingerprints <em>its own</em> images, so reading is parallel too. Per-thread checksum and timing totals are combined with <code>reduction(+:…)</code>; an error message is stored inside a <code>critical</code> section (an exception may not escape a parallel loop); a shared progress counter uses <code>atomic capture</code>.</p>
+<h3>MPI batch (coarse-grained, distributed memory)</h3>
+<ol>
+  <li>All ranks start together (<code>MPI_Barrier</code>, then the timer starts).</li>
+  <li>Rank 0 lists the image folder and <b>broadcasts</b> the file names to everyone (<code>MPI_Bcast</code>).</li>
+  <li>Each rank computes its block with <code>split_range</code> (with 8 ranks: 1,250 images each) and processes it. In the hybrid version, T OpenMP threads share the block.</li>
+  <li><code>MPI_Reduce</code> adds up all the checksums on rank 0.</li>
+</ol>
+<p>Communication is tiny: one broadcast at the start and one reduce at the end (about 0.2 s in a 55 s run).</p>
+<figure>
+  <img src="../../report/figures/decomposition.png" style="width:100%">
+  <figcaption><b>Figure 2.</b> The two MPI strategies side by side.</figcaption>
+</figure>
+<p><b>How to read Figure 2.</b> On the left (batch), the coloured squares are images; each colour is one rank’s block. Every rank works alone and only the final checksums travel to rank 0. On the right (strips), one image is cut into four coloured strips. The dashed boxes mark the halo rows at each boundary, and the numbered steps on the right repeat <em>for every single image</em>.</p>
+<h3>MPI strips (fine-grained, distributed memory): per image</h3>
+<ol>
+  <li>Rank 0 reads the image (only rank 0 has it).</li>
+  <li><code>MPI_Bcast</code> sends the width and height to all ranks.</li>
+  <li><code>MPI_Scatterv</code> sends each rank its own rows (the “v” handles strips of unequal size).</li>
+  <li>Two <code>MPI_Sendrecv</code> calls fill the halo rows: send my top 2 rows up and receive my bottom halo from below, then send my bottom 2 rows down and receive my top halo from above.</li>
+  <li>Each rank filters its rows (hybrid: OpenMP threads share them).</li>
+  <li>Three <code>MPI_Gatherv</code> calls bring the blur, sharpen and edge strips back to rank 0, which fingerprints the full result.</li>
+</ol>
+<p>That is <b>seven MPI operations per image</b>, 70,000 in total, moving about 4 MB per image (≈ 40 GB overall). The same <code>filter_row</code> function is used here: it receives an <code>ImageView</code>, a window of rows in global image coordinates, so it works on a strip with halo exactly as on a whole image.</p>
+
+<h2><span class="n">16</span>How we proved the output is correct</h2>
+<p>A fast program that gives wrong answers is worthless, so correctness was checked in three independent ways.</p>
+<ol>
+  <li><b>Checksum (fingerprint) of every run.</b> After filtering, each output image is turned into a 64-bit number with the <b>FNV-1a hash</b>; if even one pixel changes, the number changes. The per-image numbers are <b>added</b> together. Addition does not care about order, so it does not matter which thread or rank finished first, and it works directly with <code>reduction</code> and <code>MPI_Reduce</code>. Every one of our <b>54 benchmark runs</b> printed the same checksum, <code>f3eee2e41bf6a7ce</code>, as the sequential program.</li>
+  <li><b>Comparison with OpenCV.</b> On 50 X-rays we compared our results with OpenCV’s own <code>filter2D</code> and <code>Sobel</code>. Sharpen and Sobel are <b>100% identical</b>. The blur is identical for 99.82% of pixels; the other 0.18% are exact “.5” cases where we round <em>up</em> and OpenCV rounds to the nearest even number (both are valid rounding rules). There are 0 genuine mismatches.</li>
+  <li><b>Unit tests (9, all pass).</b> These check the kernel weights, hand-computed values, a flat image staying flat, the block partitioning and the checksum. One important test cuts an image into 1, 2, 3, 4, 7 and 8 strips with halos and confirms the result equals the whole-image result: the halo logic is proven before MPI is even involved.</li>
+</ol>
+<div class="callout viva"><b class="t">Viva tip</b><p>“How do you know your parallel output is correct?” Every run reports a checksum over all 30,000 output images, and all 54 runs match the sequential checksum exactly. Integer kernels make the computation deterministic, so even one wrong pixel would change the checksum.</p></div>
+
+<h2><span class="n">17</span>How we measured performance</h2>
+<ul>
+  <li><b>27 configurations</b>: sequential; OpenMP rows and images with 1, 2, 4, 8 threads; dynamic scheduling at 8 threads; MPI batch and strips with 1, 2, 4, 8 processes; hybrid 1×8, 2×4, 4×2, 2×2 for both.</li>
+  <li>Every configuration ran on all 10,000 images <b>twice</b>; we report the mean. The repeat loop was the <em>outer</em> loop (all 27, then all 27 again), so if the laptop slowly heated up or a background task ran, every configuration was affected equally.</li>
+  <li>Conditions: laptop plugged in, Windows <i>Best performance</i> mode, apps closed, dataset folder excluded from the antivirus (Avast was scanning every file read).</li>
+  <li>Timing: wall-clock time of the whole run, plus separate timers for read, compute and communication. MPI runs start the clock after a barrier, so all ranks start together.</li>
+  <li>The whole benchmark (54 runs) took about 1 hour 50 minutes and is fully automated by <code>scripts/benchmark.ps1</code>, which can resume if interrupted.</li>
+</ul>
+
+<!-- ======================================================================= PART 3 -->
+<h1><span class="part">PART 3</span>The results, explained graph by graph</h1>
+<p class="intro">For each graph: first how to read it, then what it tells us. All numbers are the mean of two runs on 10,000 images.</p>
+
+<h2><span class="n">18</span>The headline numbers</h2>
+<table>
+  <tr><th>Version</th><th class="num">Workers</th><th class="num">Time</th><th class="num">Speedup</th><th class="num">Efficiency</th></tr>
+  <tr><td>Sequential</td><td class="num">1</td><td class="num">195.1 s</td><td class="num">1.00×</td><td class="num">100%</td></tr>
+  <tr class="best"><td>OpenMP images mode</td><td class="num">8 threads</td><td class="num">55.3 s</td><td class="num">3.53×</td><td class="num">44%</td></tr>
+  <tr class="best"><td>MPI batch</td><td class="num">8 processes</td><td class="num">55.7 s</td><td class="num">3.50×</td><td class="num">44%</td></tr>
+  <tr><td>Hybrid batch (1×8, 2×4, 4×2)</td><td class="num">8</td><td class="num">56.7–57.1 s</td><td class="num">≈3.43×</td><td class="num">43%</td></tr>
+  <tr><td>OpenMP rows mode</td><td class="num">8 threads</td><td class="num">122.4 s</td><td class="num">1.59×</td><td class="num">20%</td></tr>
+  <tr><td>Hybrid strips, best (1 × 8)</td><td class="num">8</td><td class="num">127.3 s</td><td class="num">1.53×</td><td class="num">19%</td></tr>
+  <tr><td>MPI strips, best (4 processes)</td><td class="num">4</td><td class="num">141.0 s</td><td class="num">1.38×</td><td class="num">35%</td></tr>
+  <tr><td>MPI strips</td><td class="num">8 processes</td><td class="num">170.4 s</td><td class="num">1.14×</td><td class="num">14%</td></tr>
+</table>
+<div class="callout remember"><b class="t">The story in one sentence</b><p>Versions that give each worker whole images (and so also parallelise the reading) reach 3.5×. Versions that split each image are stuck near 1.5×, because one worker still reads every image and the workers must communicate and synchronise for every image.</p></div>
+
+<h2><span class="n">19</span>Execution time</h2>
+<figure><img src="../../report/figures/fig1_time.png" style="width:86%"><figcaption><b>Graph 1.</b> Execution time vs number of workers.</figcaption></figure>
+<div class="read">
+<p><b>How to read it.</b> The x-axis is the number of workers (1, 2, 4, 8); the y-axis is seconds, so <em>lower is better</em>. The dashed line is the sequential time. The grey area marks workers 5–8, which are hyper-threads, not extra cores. The blue (MPI batch) and green (OpenMP images) lines lie on top of each other.</p>
+<p><b>What it tells us.</b> Batch and images mode drop steeply: 195 → 103 → 67 → 55 s. Rows mode and strips flatten early, and strips actually gets <em>worse</em> from 4 to 8 processes (141 → 170 s). Coarse beats fine.</p>
+</div>
+
+<h2><span class="n">20</span>Speedup and efficiency</h2>
+<figure><img src="../../report/figures/fig2_speedup.png" style="width:82%"><figcaption><b>Graph 2.</b> Speedup; the dashed grey line is the ideal (N workers → N×).</figcaption></figure>
+<p><b>How to read it.</b> Higher is better. A line that follows the dashed one would be perfect scaling. <b>What it tells us.</b> Up to 2 workers, batch and images mode are almost perfect (1.9×). At 4 workers they reach 2.9×, at 8 workers 3.5×. Rows mode and strips never get above about 1.6×.</p>
+<figure><img src="../../report/figures/fig3_efficiency.png" style="width:82%"><figcaption><b>Graph 3.</b> Efficiency = speedup ÷ workers.</figcaption></figure>
+<p><b>How to read it.</b> 100% means every worker is fully useful. <b>What it tells us.</b> The coarse versions keep 95% at 2 workers and 73% at 4, then fall to 44% at 8. That drop is <b>hyper-threading</b>: 8 threads on 4 physical cores gain only about 20% over 4 threads, because two threads share one core’s execution units. Even at 4 workers we lose some efficiency, because the CPU lowers its clock speed when all cores are busy (turbo boost is highest with one active core) and all cores share one cache and memory bus. The fine-grained versions fall to about 65% already at 2 workers: their serial part dominates.</p>
+
+<h2><span class="n">21</span>Hybrid splits</h2>
+<figure><img src="../../report/figures/fig4_hybrid.png" style="width:84%"><figcaption><b>Graph 4.</b> Always 8 workers, arranged differently as processes × threads.</figcaption></figure>
+<div class="read">
+<p><b>How to read it.</b> Each pair of bars uses 8 workers in total; only the split changes (1 × 8 = one process with 8 threads … 8 × 1 = eight single-threaded processes). Lower is better.</p>
+<p><b>What it tells us.</b> For <b>batch</b> (blue) the split does not matter: about 57 s every time. Batch hardly communicates, and on one machine threads and processes compete for the same 4 cores in the same way. For <b>strips</b> (orange) the split matters a lot: 127 s with 1 × 8 vs 170 s with 8 × 1. With fewer processes there are fewer participants in every collective call and fewer halo exchanges, and fewer processes busy-wait and steal CPU from rank 0. <b>This is the case for hybrid programming:</b> when communication matters, replace processes with threads.</p>
+</div>
+
+<h2><span class="n">22</span>Where the time goes</h2>
+<figure><img src="../../report/figures/fig5_breakdown.png" style="width:88%"><figcaption><b>Graph 5.</b> Each bar is one run, split into read (purple), compute (green), MPI communication (pink) and other (grey).</figcaption></figure>
+<div class="read">
+<p><b>How to read it.</b> The full bar length is the total time; the coloured parts add up to it. “Other” is mostly checksumming and waiting.</p>
+<p><b>What it tells us. This graph explains every other result.</b> The green compute part shrinks to about 27–33 s in <em>every</em> parallel version. The difference between fast and slow versions is entirely the purple read part: about 21 s when every worker reads its own images, but 85 s or more when one thread or rank reads everything (rows mode, all strip versions). For strips with 8 processes, reading even grows to 113 s. The seven waiting processes busy-poll inside MPI, steal CPU from rank 0, and slow down its reading. On top of that come 12 s of communication.</p>
+</div>
+
+<h2><span class="n">23</span>Amdahl’s law in our data</h2>
+<figure><img src="../../report/figures/fig6_amdahl.png" style="width:82%"><figcaption><b>Graph 6.</b> Measured speedup vs the Amdahl prediction with f = 0.44.</figcaption></figure>
+<p><b>How to read it.</b> The dashed curve is what Amdahl’s formula predicts when 44% of the work is serial; the flat grey line is its ceiling (2.28×). <b>What it tells us.</b> Rows mode (yellow) follows the prediction and stays under the ceiling; it is slightly below the curve because of hyper-threading and clock effects. Images mode (green) breaks through the “ceiling” because it parallelises the reading as well, so its serial fraction is almost zero. <b>Lesson:</b> the bottleneck was not the convolution we set out to parallelise, but the PNG decoding around it.</p>
+<div class="callout"><b class="t">Static vs dynamic scheduling</b><p>Not graphed, because the result is “no difference”: 122.4 s vs 123.0 s (rows), 55.3 s vs 55.7 s (images). All images are the same size and all rows cost the same, so static scheduling is already perfectly balanced, and dynamic only adds a little bookkeeping. Dynamic would help if images had different sizes.</p></div>
+
+<!-- ======================================================================= PART 4 -->
+<h1><span class="part">PART 4</span>Decisions we made, and why</h1>
+<p class="intro">Examiners love “why” questions. Every important choice in the project is listed here with its reason.</p>
+<h2><span class="n">24</span>Decision log</h2>
+<table class="allow-break">
+  <tr><th style="width:31%">Decision</th><th>Why</th></tr>
+  <tr class="group"><td colspan="2">Problem and data</td></tr>
+  <tr><td>A batch of many images (not one giant image)</td><td>The proposal says “at least 10,000 images”, and real workloads (hospital archives, ML training sets) look like this. We still implemented strip decomposition to show the halo technique.</td></tr>
+  <tr><td>NIH ChestX-ray14, one dataset</td><td>Public, large, uniform 1024×1024 images, medically meaningful; unique among the groups; one domain keeps the story simple.</td></tr>
+  <tr><td>10,000 of 14,999 images</td><td>Meets the proposal’s target; a full pass stays under an hour on a laptop; the rest is spare.</td></tr>
+  <tr><td>Grayscale only</td><td>X-rays are gray by nature; one channel keeps the code simple (the ~1% RGBA files are converted on load).</td></tr>
+  <tr class="group"><td colspan="2">Computation</td></tr>
+  <tr><td>Hand-written convolution; OpenCV only for file I/O</td><td>The course is about parallelising computation ourselves; this is also what the proposal promised.</td></tr>
+  <tr><td>Integer kernel weights</td><td>Exact arithmetic gives deterministic, bit-identical results in every version, which is what makes checksum verification possible.</td></tr>
+  <tr><td>All three filters in one pass</td><td>Each neighbourhood is loaded from memory once instead of three times, which is faster.</td></tr>
+  <tr><td>Replicate border</td><td>The standard choice (also OpenCV’s option); avoids dark frames that zero-padding would create.</td></tr>
+  <tr><td>Fast interior path, clamped border path</td><td>More than 99% of pixels need no bounds checks; separating them speeds up the inner loop.</td></tr>
+  <tr><td>One shared <code>filter_row</code> for every version</td><td>Fair comparison: any difference in speed comes from parallelisation, not from different filtering code.</td></tr>
+  <tr class="group"><td colspan="2">Parallel design</td></tr>
+  <tr><td>Two OpenMP modes (rows, images)</td><td>To compare fine and coarse granularity under the same model, and to demonstrate Amdahl’s law directly.</td></tr>
+  <tr><td>Two MPI strategies (batch, strips)</td><td>Batch is the best fit for many images; strips is what the project description mentions (“partition image rows/tiles”) and shows halo exchange. Comparing them is the core insight.</td></tr>
+  <tr><td>Block partitioning (<code>split_range</code>)</td><td>Images cost the same, so equal contiguous blocks are already balanced, with no coordination needed.</td></tr>
+  <tr><td><code>MPI_Sendrecv</code> for halos</td><td>Deadlock-free by design and simple; <code>MPI_PROC_NULL</code> removes special cases at the edges.</td></tr>
+  <tr><td><code>Scatterv</code>/<code>Gatherv</code> (with “v”)</td><td>The image height need not divide evenly by the number of processes.</td></tr>
+  <tr><td><code>MPI_THREAD_FUNNELED</code></td><td>Only the main thread calls MPI, outside parallel regions; this is the cheapest correct level.</td></tr>
+  <tr><td><code>reduction</code> instead of atomic/critical for sums</td><td>No contention: private copies, combined once.</td></tr>
+  <tr><td>Checksum combined by addition</td><td>Order-independent, so it works with any thread/rank finishing order and with reductions.</td></tr>
+  <tr><td><code>schedule(runtime)</code></td><td>Lets us test static vs dynamic without recompiling.</td></tr>
+  <tr><td>MPI program = hybrid with <code>--threads 1</code></td><td>One code base for both, so MPI-only and hybrid runs are directly comparable.</td></tr>
+  <tr class="group"><td colspan="2">Measurement</td></tr>
+  <tr><td>Save only a few output images</td><td>Writing 30,000 PNGs would measure the disk, not our parallel computing.</td></tr>
+  <tr><td>Separate read / compute / comm timers</td><td>To explain results, not just report them (this is how we found the 44% serial read).</td></tr>
+  <tr><td>Two repeats, repeat loop outermost</td><td>Exposes noise (one 50.1 s “record” turned out to be luck) and spreads any drift evenly across configurations.</td></tr>
+  <tr><td>Quiet machine, antivirus exclusion, Best performance</td><td>An early run with background activity took 559 s instead of ~200 s; the antivirus scanned every file we read.</td></tr>
+  <tr><td>Windows + MSYS2 g++ + MS-MPI</td><td>The laptop we have runs Windows; this combination supports C++20, OpenMP and MPI natively.</td></tr>
+</table>
+
+<!-- ======================================================================= PART 5 -->
+<h1><span class="part">PART 5</span>Viva preparation</h1>
+<p class="intro">Every member must be able to explain the whole project. Practise the one-minute summary aloud, make sure you can answer the questions below in your own words, and know where things are in the code.</p>
+
+<h2><span class="n">25</span>The project in one minute</h2>
+<div class="callout"><p>“We apply three convolution filters (Gaussian blur, sharpen and Sobel edge detection) to 10,000 chest X-rays from the NIH ChestX-ray14 dataset. The convolution is written by hand in C++; OpenCV only reads and writes the files. We parallelised it with OpenMP, MPI and hybrid MPI + OpenMP, in two ways: giving each worker whole images, and splitting each image into strips with halo exchange. Sequentially it takes 195 seconds. Whole-image distribution brings that to 55 seconds, a 3.5× speedup on our 4-core laptop, with every version producing bit-identical output, verified by checksum. Strip decomposition only reaches about 1.5×, because one process still reads every image, which is 44% of the work (Amdahl’s law), and because it must communicate for every image. Hybrid helps there: 1 process × 8 threads is 25% faster than 8 processes.”</p></div>
+
+<h2><span class="n">26</span>Concepts to know cold</h2>
+<div class="two">
+<ul>
+  <li>Pixel, grayscale, kernel, convolution, radius, replicate border</li>
+  <li>Gaussian blur vs sharpen vs Sobel; why Sobel uses two kernels</li>
+  <li>Process vs thread; shared vs distributed memory</li>
+  <li>Core vs hyper-thread; why 8 threads ≠ 8× speed</li>
+  <li>OpenMP: <code>parallel for</code>, static/dynamic, reduction, critical, atomic, barrier</li>
+  <li>Race condition and how we avoid it</li>
+  <li>MPI: rank, communicator, mpiexec</li>
+  <li>Bcast, Scatterv, Gatherv, Reduce, Sendrecv, PROC_NULL, Barrier</li>
+  <li>Deadlock and why Sendrecv avoids it</li>
+  <li>Hybrid P × T; FUNNELED and the other thread levels</li>
+  <li>Data decomposition; coarse vs fine granularity</li>
+  <li>Load balancing; block partitioning</li>
+  <li>Halo rows: what, why 2 rows, how exchanged</li>
+  <li>Speedup, efficiency, overhead</li>
+  <li>Amdahl’s law: formula, our f = 0.44, ceiling 2.28×</li>
+  <li>Busy-waiting and why strips at 8 processes is slower</li>
+  <li>Checksum verification and integer kernels</li>
+  <li>Why batch beats strips for this dataset</li>
+</ul>
+</div>
+
+<h2><span class="n">27</span>Likely viva questions, with answers</h2>
+<h3>About the project</h3>
+<div class="qa"><div class="q">What does your project do, and what is parallel about it?</div><div class="a"><p>It filters 10,000 X-rays with blur, sharpen and edge detection. Every output pixel is independent, so pixels, rows or whole images can be computed at the same time by different threads or processes. We compare OpenMP, MPI and hybrid versions against a sequential baseline.</p></div></div>
+<div class="qa"><div class="q">Why is this a “hybrid” project, and where exactly is the hybrid part?</div><div class="a"><p>The MPI programs (<code>mpi_batch</code>, <code>mpi_strips</code>) run P processes, and inside each process OpenMP threads share that process’s work. <code>MPI_Init_thread</code> with FUNNELED enables this. We tested the splits 1×8, 2×4, 4×2, 8×1 and 2×2.</p></div></div>
+<div class="qa"><div class="q">Why did you write the convolution yourselves instead of using OpenCV?</div><div class="a"><p>Because the point of the course is to parallelise the computation ourselves. OpenCV’s filters are already internally optimised and parallel, so using them would hide the work. OpenCV is used only to decode and encode PNG files.</p></div></div>
+<div class="qa"><div class="q">Is running MPI on one laptop meaningful?</div><div class="a"><p>Yes for learning and comparing: the processes really have separate memories and really exchange messages (through shared memory instead of a network). The limitation is that communication is cheaper than on a real cluster, so strip decomposition would look even worse on a network, and hybrid even better.</p></div></div>
+<h3>OpenMP</h3>
+<div class="qa"><div class="q">What is the difference between your rows mode and images mode?</div><div class="a"><p>Rows mode splits the rows of one image among threads (fine-grained); reading stays on one thread. Images mode gives each thread whole images (coarse-grained), so reading is parallel too. Images mode reaches 3.53× and rows mode only 1.59×.</p></div></div>
+<div class="qa"><div class="q">Where could a race condition happen in your code, and how did you prevent it?</div><div class="a"><p>On the shared checksum and timing totals, the error message and the progress counter. We used <code>reduction(+:…)</code> for the sums, <code>critical</code> for the error string and <code>atomic capture</code> for the counter. The filter itself needs no protection: each thread writes only its own rows or images.</p></div></div>
+<div class="qa"><div class="q">Why did dynamic scheduling not help?</div><div class="a"><p>Every image is 1024×1024 and every row costs the same, so static blocks are already balanced. Dynamic scheduling only adds the cost of threads repeatedly asking for new chunks. It helps when the work per iteration varies.</p></div></div>
+<div class="qa"><div class="q">What is an implicit barrier? Where is it in your code?</div><div class="a"><p>At the end of every <code>#pragma omp parallel for</code>, threads wait until all have finished. In rows mode it guarantees that an image is completely filtered before the next one is read.</p></div></div>
+<h3>MPI</h3>
+<div class="qa"><div class="q">Explain the communication in MPI batch.</div><div class="a"><p>Rank 0 lists the files and broadcasts the list (<code>MPI_Bcast</code>). Each rank computes its own block of images with <code>split_range</code> and works independently. At the end, <code>MPI_Reduce</code> adds the checksums on rank 0, and <code>MPI_Gather</code> collects per-rank timings for the report. That is almost no communication: about 0.2 s.</p></div></div>
+<div class="qa"><div class="q">Walk me through MPI strips for one image.</div><div class="a"><p>Rank 0 reads the image; Bcast the size; Scatterv each rank its rows; two Sendrecv calls exchange 2 halo rows with each neighbour; each rank filters its rows (with OpenMP threads in the hybrid version); three Gatherv calls collect blur, sharpen and edges on rank 0, which computes the checksum. That is seven MPI operations per image.</p></div></div>
+<div class="qa"><div class="q">Why exactly 2 halo rows?</div><div class="a"><p>The largest kernel is the 5×5 blur, with radius 2: a pixel needs 2 rows above and 2 below. The 3×3 kernels need only 1, so 2 covers all of them.</p></div></div>
+<div class="qa"><div class="q">Why Sendrecv and not Send then Recv?</div><div class="a"><p>If every rank calls a blocking Send first, they can all wait for a receiver that never comes: deadlock. Sendrecv does both together, and MPI guarantees it completes. <code>MPI_PROC_NULL</code> handles the top and bottom ranks, which have no neighbour.</p></div></div>
+<div class="qa"><div class="q">Why Scatterv/Gatherv instead of Scatter/Gather?</div><div class="a"><p>Plain Scatter requires equal pieces. 1,024 rows divided among 3 processes is not equal (342, 341, 341), so we need the “v” versions with per-rank counts and offsets.</p></div></div>
+<div class="qa"><div class="q">Why is strips with 8 processes slower than with 4?</div><div class="a"><p>Two reasons. More processes means more communication (about 12 s). More importantly, the waiting processes busy-poll inside MPI, and 8 processes on 4 cores steal CPU time from rank 0, whose reading slows from 85 s to 113 s. Since rank 0’s reading is the bottleneck, the whole run slows down.</p></div></div>
+<h3>Hybrid</h3>
+<div class="qa"><div class="q">What does MPI_THREAD_FUNNELED mean, and why is it enough?</div><div class="a"><p>Threads exist, but only the main thread makes MPI calls. All our MPI calls are outside the OpenMP loops, so that rule always holds. Higher levels such as MULTIPLE would add locking overhead inside MPI for nothing.</p></div></div>
+<div class="qa"><div class="q">Why did the hybrid split not matter for batch but matter for strips?</div><div class="a"><p>Batch barely communicates, so processes and threads behave the same on one machine (~57 s for every split). Strips communicates for every image, so fewer processes (1 × 8) means fewer and smaller collective operations and less busy-waiting: 127 s vs 170 s.</p></div></div>
+<h3>Performance</h3>
+<div class="qa"><div class="q">Your laptop has 8 threads. Why not 8× speedup?</div><div class="a"><p>Only 4 cores are real; hyper-threads share a core, so 4 → 8 threads gave only about 20% more. On top of that, the CPU runs at a lower clock when all cores are busy, and the cores share cache and memory bandwidth. 3.5× on 4 cores is a good result.</p></div></div>
+<div class="qa"><div class="q">State Amdahl’s law and apply it to your project.</div><div class="a"><p>S(N) = 1 / (f + (1 − f)/N), with maximum 1/f. Reading is 85.5 of 195.1 s, so f = 0.44 and the maximum is 2.28× for any version that reads serially. Rows mode measured 1.59× at 8 threads, under the curve as predicted; images mode avoids the limit by reading in parallel.</p></div></div>
+<div class="qa"><div class="q">Why is reading so expensive? Isn’t it just disk?</div><div class="a"><p>No: PNG files are compressed, so reading means decompressing, which is CPU work. Proof: reading time fell from 85.5 s to 45.4 s to 28.8 s with 1, 2, 4 parallel readers. A disk bottleneck would not speed up like that.</p></div></div>
+<div class="qa"><div class="q">Some 1-worker runs show 101% efficiency. How is that possible?</div><div class="a"><p>That is measurement noise of about 1%: those runs were slightly faster than the sequential run. That is also why we repeated every run twice and report means.</p></div></div>
+<h3>Correctness and implementation</h3>
+<div class="qa"><div class="q">How do you know the parallel versions are correct?</div><div class="a"><p>A 64-bit FNV-1a checksum over all 30,000 output images; all 54 runs equal the sequential checksum <code>f3eee2e41bf6a7ce</code>. In addition: 9 unit tests (including strips + halos = whole image) and a comparison with OpenCV (sharpen and Sobel 100% identical, blur differs only in .5 rounding ties).</p></div></div>
+<div class="qa"><div class="q">Why are the checksums added and not hashed together?</div><div class="a"><p>Addition gives the same result in any order. Threads and ranks finish in unpredictable order, and reductions combine values in an unspecified order, so we need an order-independent combination.</p></div></div>
+<div class="qa"><div class="q">How did you divide 10,000 images among processes?</div><div class="a"><p>Block partitioning with <code>split_range(total, parts, index)</code>: each part gets total/parts items and the first total%parts parts get one extra. With 8 processes, each gets 1,250 images.</p></div></div>
+<div class="qa"><div class="q">What would you improve with more time?</div><div class="a"><p>In strips, overlap reading and computing (rank 0 decodes the next image while the others filter), or let ranks take turns reading; run on a real multi-node cluster; vectorise the kernel with SIMD and use cache blocking.</p></div></div>
+
+<h2><span class="n">28</span>Numbers to remember</h2>
+<table>
+  <tr><th style="width:52%">Fact</th><th>Number</th></tr>
+  <tr><td>Images / resolution / size</td><td>10,000 · 1024 × 1024 · 3.98 GB (from 14,999 downloaded)</td></tr>
+  <tr><td>Hardware</td><td>Intel i7-8565U, 4 cores / 8 threads, 16 GB RAM, Windows 11</td></tr>
+  <tr><td>Sequential time (read + compute)</td><td>195.1 s (85.5 s + 103.7 s)</td></tr>
+  <tr><td>Best time / speedup</td><td>55.3 s (OpenMP images, 8 threads) · 3.53×; MPI batch 8 procs 55.7 s · 3.50×</td></tr>
+  <tr><td>Efficiency at 2 / 4 / 8 workers (batch)</td><td>94% / 73% / 44%</td></tr>
+  <tr><td>OpenMP rows mode, 8 threads</td><td>122.4 s · 1.59×</td></tr>
+  <tr><td>Strips: best pure MPI / 8 processes / best hybrid</td><td>141.0 s (4 procs) · 170.4 s · 127.3 s (1 × 8)</td></tr>
+  <tr><td>Serial fraction / Amdahl ceiling</td><td>f = 0.44 · 2.28×</td></tr>
+  <tr><td>Hyper-threading gain (4 → 8 threads)</td><td>≈ 20% (66.6 s → 55.3 s)</td></tr>
+  <tr><td>Benchmark</td><td>27 configurations × 2 repeats = 54 runs, ~1 h 50 min</td></tr>
+  <tr><td>Correctness</td><td>checksum <code>f3eee2e41bf6a7ce</code> in 54/54 runs; 9/9 tests; OpenCV match (0 real mismatches)</td></tr>
+  <tr><td>Halo / MPI ops per image (strips)</td><td>2 rows per side · 7 operations · ≈ 4 MB per image</td></tr>
+</table>
+
+<h2><span class="n">29</span>Live demo commands</h2>
+<p>Run these from the project folder in PowerShell. Use <code>--count</code> to keep the demo short; every program prints its time and checksum, and for the same count all versions print the <b>same checksum</b>. That is a great thing to show the examiner.</p>
+<pre># build everything (one command)
+powershell -ExecutionPolicy Bypass -File scripts\build.ps1
+
+# unit tests
+powershell -ExecutionPolicy Bypass -File scripts\run.ps1 test_common
+
+# sequential vs OpenMP on 500 images (compare the time and the checksum)
+powershell -ExecutionPolicy Bypass -File scripts\run.ps1 sequential --count 500
+powershell -ExecutionPolicy Bypass -File scripts\run.ps1 openmp --count 500 --threads 8 --mode images
+
+# MPI batch with 4 processes, then hybrid 2 processes x 4 threads
+powershell -ExecutionPolicy Bypass -File scripts\run.ps1 -Procs 4 mpi_batch --count 500
+powershell -ExecutionPolicy Bypass -File scripts\run.ps1 -Procs 2 mpi_batch --count 500 --threads 4
+
+# MPI strips with halo exchange (prints the per-rank table)
+powershell -ExecutionPolicy Bypass -File scripts\run.ps1 -Procs 4 mpi_strips --count 100
+
+# save a few filtered images to show the result
+powershell -ExecutionPolicy Bypass -File scripts\run.ps1 sequential --count 5 --save 5</pre>
+<div class="callout viva"><b class="t">Final tip</b><p>If you get a question you can’t answer immediately, go back to the two ideas everything rests on: <b>granularity</b> (whole images vs pieces of an image) and <b>Amdahl’s law</b> (the serial read). Almost every result in this project is explained by one of them.</p></div>
+
+</body>
+</html>
