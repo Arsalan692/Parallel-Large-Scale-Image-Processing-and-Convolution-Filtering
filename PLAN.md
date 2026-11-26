@@ -60,14 +60,27 @@ Apply three convolution filters (Gaussian blur 5×5, sharpen 3×3, Sobel edge de
   - Going from 4 to 8 threads gains only about 15%: the laptop has 4 physical cores, and threads 5–8 are hyper-threads sharing those cores.
   - 1-thread runs were about 5% faster than the baseline (run-to-run variation). In Phase 6 every configuration, including sequential, is re-run under the same conditions.
 
-## Phase 4: MPI versions (the main contribution)
-- [ ] **4A. Batch distribution** (`src/mpi_batch/`): images split across processes; results and checksums combined with `MPI_Reduce`
-- [ ] **4B. Strip decomposition** (`src/mpi_strips/`): each image split into horizontal strips
-  - `MPI_Scatterv` sends the strips
-  - halo rows are exchanged with `MPI_Sendrecv`
-  - `MPI_Gatherv` reassembles the image
-- [ ] Run with 1, 2, 4 and 8 processes; communication time is measured separately from compute time
-- **Done when:** both versions match the sequential checksum
+## Phase 4: MPI versions (the main contribution) ✅
+- [x] **4A. Batch distribution** (`src/mpi_batch/`): `MPI_Bcast` of the file list, block partitioning of the images, `MPI_Reduce` of the checksums, `MPI_Gather` of the per-process timings
+- [x] **4B. Strip decomposition** (`src/mpi_strips/`), for every image:
+  - `MPI_Bcast` the image size
+  - `MPI_Scatterv` the strips
+  - 2× `MPI_Sendrecv` halo exchange (2 rows each way, `MPI_PROC_NULL` at the ends)
+  - 3× `MPI_Gatherv` to collect the outputs
+- [x] 1, 2, 4 and 8 processes on 10,000 images (`results/mpi_phase4.csv`, per-process tables in `results/raw/phase4_log.txt`); **all 8 runs match the sequential checksum**
+
+| Processes | mpi_batch | mpi_strips |
+|---|---|---|
+| 1 | 203.8 s (1.04×) | 207.8 s (1.02×) |
+| 2 | 103.8 s (2.05×) | 157.4 s (1.35×) |
+| 4 | 65.8 s (3.24×) | 141.3 s (1.51×) |
+| 8 | **54.9 s (3.88×)** | 170.9 s (1.25×, slower than 4) |
+
+- Findings:
+  - **Batch** is almost perfectly balanced (1,250 images and about 32 s compute per process at P=8) and has almost no communication. It is the best result so far.
+  - **Strips:** only rank 0 reads (about 92 s, sequential), so the other ranks spend most of their time waiting inside MPI calls (about 110 s at P=4). Amdahl's law again.
+  - **Strips at P=8 is slower than at P=4.** 8 processes share 4 cores, and MPI processes that are waiting keep polling (busy-waiting) instead of sleeping. They steal CPU time from rank 0, whose reading slows from 92 s to 114 s.
+  - Strip decomposition is designed for **one very large image** that one process cannot handle. For a batch of many small images, distributing whole images (batch) is far better.
 
 ## Phase 5: Hybrid MPI + OpenMP
 - [ ] Both MPI programs with OpenMP threads inside each process (`MPI_THREAD_FUNNELED`)

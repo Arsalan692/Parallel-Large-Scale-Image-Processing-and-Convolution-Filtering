@@ -32,6 +32,7 @@ src/
     checksum.hpp     output fingerprints (to prove parallel output == sequential output)
     options.*        command-line options
     results.*        timing summary + CSV output
+    mpi_utils.hpp    MPI helpers: broadcast file list, per-process breakdown table
     timer.hpp, image.hpp, config.hpp
   sequential/      Phase 2: single-core baseline
   openmp/          Phase 3: OpenMP threads (--mode rows | images, --schedule static | dynamic)
@@ -70,7 +71,7 @@ Each program accepts `--help` to list its options (`--input`, `--count`, `--save
 - [x] Phase 1: project skeleton, shared code, build/run scripts, unit tests
 - [x] Phase 2: sequential baseline (10,000 images: 212.8 s)
 - [x] Phase 3: OpenMP version (best: 8 threads, images mode, 56.9 s = 3.74x)
-- [ ] Phase 4: MPI versions (batch distribution, strip decomposition with halo exchange)
+- [x] Phase 4: MPI versions (batch: 8 procs 54.9 s = 3.88x; strips: best 4 procs 141.3 s = 1.51x)
 - [ ] Phase 5: hybrid MPI + OpenMP
 - [ ] Phase 6: benchmarks
 - [ ] Phase 7: analysis and graphs

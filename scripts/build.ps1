@@ -5,11 +5,12 @@
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File scripts\build.ps1               # build everything
     powershell -ExecutionPolicy Bypass -File scripts\build.ps1 sequential    # build one program
+    powershell -ExecutionPolicy Bypass -File scripts\build.ps1 mpi_batch mpi_strips   # build several
     powershell -ExecutionPolicy Bypass -File scripts\build.ps1 -Clean        # delete build outputs first
 #>
 param(
-    [string[]]$Targets = @(),
-    [switch]$Clean
+    [switch]$Clean,
+    [Parameter(ValueFromRemainingArguments = $true)][string[]]$Targets = @()
 )
 
 $ErrorActionPreference = 'Stop'
