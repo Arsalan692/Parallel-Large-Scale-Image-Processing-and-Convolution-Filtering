@@ -16,7 +16,8 @@ struct Options {
     std::string csv;                             // --csv <file>    append a results row to this CSV
     int threads = 0;                             // --threads <n>   OpenMP threads (0 = default)
     std::string schedule = "static";             // --schedule static|dynamic  OpenMP loop schedule
-    std::string label;                           // --label <text>  free note stored in the CSV
+    std::string mode = "rows";                   // --mode rows|images  what OpenMP threads share
+    std::string label;                          // --label <text>  free note stored in the CSV
     bool help = false;                           // --help
 };
 

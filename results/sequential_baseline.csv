@@ -1,2 +1,2 @@
-timestamp,version,procs,threads,workers,images,schedule,read_s,compute_s,comm_s,write_s,total_s,checksum,label
-2026-11-26 06:21:24,sequential,1,1,1,10000,,93.597970,111.787128,0.000000,0.809350,212.791534,f3eee2e41bf6a7ce,"phase2 baseline"
+timestamp,version,mode,procs,threads,workers,images,schedule,read_s,compute_s,comm_s,write_s,total_s,checksum,label
+2026-11-26 06:21:24,sequential,,1,1,1,10000,,93.597970,111.787128,0.000000,0.809350,212.791534,f3eee2e41bf6a7ce,phase2 baseline

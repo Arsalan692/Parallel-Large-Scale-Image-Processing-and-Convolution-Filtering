@@ -14,8 +14,11 @@ struct RunResult {
     int procs = 1;         // MPI processes
     int threads = 1;       // OpenMP threads per process
     int images = 0;        // images processed
+    std::string mode;      // OpenMP work sharing: rows / images (empty if not applicable)
     std::string schedule;  // OpenMP schedule (empty if not applicable)
     PhaseTimes times;      // read / compute / comm / write breakdown
+                           // (when threads work on different images at once, read/compute
+                           //  are the AVERAGE busy time per thread, so they stay comparable)
     double total = 0.0;    // end-to-end wall-clock time
     uint64_t checksum = 0; // dataset fingerprint (must equal the sequential one)
     std::string label;

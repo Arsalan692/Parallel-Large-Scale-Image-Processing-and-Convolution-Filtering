@@ -32,8 +32,11 @@ std::string csv_field(const std::string& s) {
 }  // namespace
 
 void print_result(const RunResult& r) {
-    std::printf("\n=== %s | %d process(es) x %d thread(s) | %d images ===\n",
-                r.version.c_str(), r.procs, r.threads, r.images);
+    std::printf("\n=== %s | %d process(es) x %d thread(s) | %d images", r.version.c_str(), r.procs,
+                r.threads, r.images);
+    if (!r.mode.empty()) std::printf(" | mode=%s", r.mode.c_str());
+    if (!r.schedule.empty()) std::printf(" | schedule=%s", r.schedule.c_str());
+    std::printf(" ===\n");
     std::printf("  read     %10.3f s\n", r.times.read);
     std::printf("  compute  %10.3f s\n", r.times.compute);
     std::printf("  comm     %10.3f s\n", r.times.comm);
@@ -50,14 +53,14 @@ void append_csv(const std::string& path, const RunResult& r) {
     if (!f) throw std::runtime_error("Could not open CSV file: " + path);
 
     if (is_new)
-        f << "timestamp,version,procs,threads,workers,images,schedule,"
+        f << "timestamp,version,mode,procs,threads,workers,images,schedule,"
              "read_s,compute_s,comm_s,write_s,total_s,checksum,label\n";
 
     char nums[256];
     std::snprintf(nums, sizeof(nums), "%.6f,%.6f,%.6f,%.6f,%.6f",
                   r.times.read, r.times.compute, r.times.comm, r.times.write, r.total);
 
-    f << timestamp_now() << ',' << r.version << ',' << r.procs << ',' << r.threads << ','
+    f << timestamp_now() << ',' << r.version << ',' << r.mode << ',' << r.procs << ',' << r.threads << ','
       << r.procs * r.threads << ',' << r.images << ',' << r.schedule << ',' << nums << ','
       << to_hex(r.checksum) << ',' << csv_field(r.label) << '\n';
 }

@@ -34,7 +34,7 @@ src/
     results.*        timing summary + CSV output
     timer.hpp, image.hpp, config.hpp
   sequential/      Phase 2: single-core baseline
-  openmp/          Phase 3: OpenMP threads
+  openmp/          Phase 3: OpenMP threads (--mode rows | images, --schedule static | dynamic)
   mpi_batch/       Phase 4A: MPI, whole images distributed across processes (+ OpenMP = hybrid)
   mpi_strips/      Phase 4B: MPI, each image split into strips with halo exchange (+ OpenMP = hybrid)
 tests/             unit tests (test_common) + validation against OpenCV (validate_opencv)
@@ -63,13 +63,13 @@ powershell -ExecutionPolicy Bypass -File scripts\run.ps1 test_common
 powershell -ExecutionPolicy Bypass -File scripts\run.ps1 sequential --count 100 --save 5
 powershell -ExecutionPolicy Bypass -File scripts\run.ps1 -Procs 4 mpi_batch --count 1000 --threads 2
 ```
-Each program accepts `--help` to list its options (`--input`, `--count`, `--save`, `--out`, `--csv`, `--threads`, `--schedule`, `--label`).
+Each program accepts `--help` to list its options (`--input`, `--count`, `--save`, `--out`, `--csv`, `--threads`, `--schedule`, `--mode`, `--label`).
 
 ## Status
 - [x] Phase 0: toolchain, dataset, repo
 - [x] Phase 1: project skeleton, shared code, build/run scripts, unit tests
 - [x] Phase 2: sequential baseline (10,000 images: 212.8 s)
-- [ ] Phase 3: OpenMP version
+- [x] Phase 3: OpenMP version (best: 8 threads, images mode, 56.9 s = 3.74x)
 - [ ] Phase 4: MPI versions (batch distribution, strip decomposition with halo exchange)
 - [ ] Phase 5: hybrid MPI + OpenMP
 - [ ] Phase 6: benchmarks

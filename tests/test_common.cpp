@@ -195,11 +195,11 @@ static void test_checksum() {
 static void test_options() {
     {
         const char* argv[] = {"prog", "--count", "500", "--threads", "4", "--schedule", "dynamic",
-                              "--save", "3", "--csv", "r.csv", "--label", "hi"};
+                              "--save", "3", "--csv", "r.csv", "--label", "hi", "--mode", "images"};
         Options opt;
         std::string err;
-        CHECK(parse_options(13, const_cast<char**>(argv), opt, err));
-        CHECK(opt.count == 500 && opt.threads == 4 && opt.schedule == "dynamic");
+        CHECK(parse_options(15, const_cast<char**>(argv), opt, err));
+        CHECK(opt.count == 500 && opt.threads == 4 && opt.schedule == "dynamic" && opt.mode == "images");
         CHECK(opt.save == 3 && opt.csv == "r.csv" && opt.label == "hi");
         CHECK(opt.input_dir == kDefaultInputDir);
     }

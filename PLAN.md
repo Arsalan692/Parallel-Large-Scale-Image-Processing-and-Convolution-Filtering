@@ -40,11 +40,25 @@ Apply three convolution filters (Gaussian blur 5×5, sharpen 3×3, Sobel edge de
   - Reading (PNG decoding) costs about as much as filtering, so the parallel versions should also parallelise reading.
   - Background load can double run times. Benchmarks need a quiet machine (an earlier run was 559 s with other activity running).
 
-## Phase 3: OpenMP version
-- [ ] `src/openmp/main.cpp`: `#pragma omp parallel for` over the rows of each image
-- [ ] Run with 1, 2, 4 and 8 threads
-- [ ] Extra experiment: `schedule(static)` vs `schedule(dynamic)`
-- **Done when:** the checksum matches the sequential one and the timings are recorded
+## Phase 3: OpenMP version ✅
+- [x] `src/openmp/main.cpp` with two work-sharing modes:
+  - `--mode rows`: `#pragma omp parallel for` over the rows of each image (fine-grained; reading stays sequential)
+  - `--mode images`: `#pragma omp parallel for reduction(+: …)` over images (coarse-grained; each thread reads and filters whole images)
+- [x] 1, 2, 4 and 8 threads on 10,000 images (`results/openmp_phase3.csv`); **all 12 runs match the sequential checksum `f3eee2e41bf6a7ce`**
+- [x] `schedule(static)` vs `schedule(dynamic)`: no difference (all images are the same size, so the load is already balanced)
+- Results (speedup vs the 212.8 s baseline):
+
+| Threads | rows mode | images mode |
+|---|---|---|
+| 1 | 203.2 s (1.05×) | 203.1 s (1.05×) |
+| 2 | 153.4 s (1.39×) | 103.4 s (2.06×) |
+| 4 | 134.3 s (1.58×) | 66.7 s (3.19×) |
+| 8 | 129.1 s (1.65×) | **56.9 s (3.74×)** |
+
+- Findings:
+  - In rows mode, reading (~90 s) stays sequential. By Amdahl's law the maximum speedup is about 2.3×, so we only reach 1.65×.
+  - Going from 4 to 8 threads gains only about 15%: the laptop has 4 physical cores, and threads 5–8 are hyper-threads sharing those cores.
+  - 1-thread runs were about 5% faster than the baseline (run-to-run variation). In Phase 6 every configuration, including sequential, is re-run under the same conditions.
 
 ## Phase 4: MPI versions (the main contribution)
 - [ ] **4A. Batch distribution** (`src/mpi_batch/`): images split across processes; results and checksums combined with `MPI_Reduce`

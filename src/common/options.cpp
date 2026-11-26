@@ -52,6 +52,9 @@ bool parse_options(int argc, char** argv, Options& opt, std::string& error) {
         } else if (arg == "--schedule") {
             if (value != "static" && value != "dynamic") { error = "--schedule must be static or dynamic"; return false; }
             opt.schedule = value;
+        } else if (arg == "--mode") {
+            if (value != "rows" && value != "images") { error = "--mode must be rows or images"; return false; }
+            opt.mode = value;
         } else if (arg == "--label") {
             opt.label = value;
         } else {
@@ -72,6 +75,7 @@ void print_usage(const char* program) {
         "  --csv <file>        append the timing results to this CSV file\n"
         "  --threads <n>       OpenMP threads per process (default: OpenMP default)\n"
         "  --schedule <kind>   OpenMP loop schedule: static or dynamic (default: static)\n"
+        "  --mode <kind>       what OpenMP threads share: rows (of each image) or images (default: rows)\n"
         "  --label <text>      free-text note stored in the CSV\n"
         "  --help              show this message\n",
         program, kDefaultInputDir, kDefaultImageCount, kDefaultOutputDir);
