@@ -153,15 +153,29 @@ Apply three convolution filters (Gaussian blur 5×5, sharpen 3×3, Sobel edge de
   - why repeats matter
 - Colours are validated for colour-blind readers. Each series keeps the same colour in every figure.
 
-## Phase 8: Report (Word .docx)
-Sections in the instructor's order:
-1. Abstract
-2. Introduction
-3. Dataset Description
-4. Methodology
-5. Implementation (code screenshots showing where each PDC concept is applied)
-6. Results
-7. Observations & Conclusion
+## Phase 8: Report (Word .docx) ✅
+- [x] `report/PDC_Project_Report_Group18.docx` (22 pages, A4), plus a PDF copy for checking. Sections follow the instructor's order:
+  1. Abstract
+  2. Introduction
+  3. Dataset Description
+  4. Methodology
+  5. Implementation
+  6. Results
+  7. Observations & Conclusion
+  8. References
+- [x] Cover page, table of contents with page numbers, consistent typography (Cambria body, Calibri headings), numbered figures, tables and listings
+- [x] 6 code screenshots taken from the real source files with their line numbers; the lines where PDC concepts are applied are highlighted (`report/scripts/make_code_figures.py`)
+- [x] Decomposition diagram, batch vs strips with halo (`report/scripts/make_diagram.py`)
+- [x] A "PDC concept map" table pointing to the exact file and line of every OpenMP and MPI construct
+- [x] The results table is read straight from `results/summary.csv`, so no numbers were typed by hand
+- To rebuild:
+  ```
+  cd report\scripts
+  npm install
+  node build_report.js
+  powershell -ExecutionPolicy Bypass -File finalize_report.ps1
+  ```
+  `finalize_report.ps1` uses Microsoft Word to fill in the table of contents and export the PDF.
 
 ## Phase 9: Submission and viva prep
 - [ ] ZIP of the 10,000 images used, plus source code and the report

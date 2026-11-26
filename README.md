@@ -76,5 +76,5 @@ Each program accepts `--help` to list its options (`--input`, `--count`, `--save
 - [x] Phase 6: final benchmark, 27 configs x 2 repeats on 10,000 images, all checksums identical (`results/benchmarks.csv`; seq 195.1 s, best OpenMP images 8 thr 55.3 s = 3.53x, MPI batch 8 procs 55.7 s = 3.50x)
   - run it: `powershell -ExecutionPolicy Bypass -File scripts\benchmark.ps1` (about 2 h; resumable)
 - [x] Phase 7: analysis and graphs (`analysis/make_graphs.py` -> `report/figures/fig1-fig6`, `results/summary.md`, `report/observations.md`)
-- [ ] Phase 8: report
+- [x] Phase 8: report (`report/PDC_Project_Report_Group18.docx`, 22 pages; rebuild with `report/scripts/build_report.js`)
 - [ ] Phase 9: submission and viva prep

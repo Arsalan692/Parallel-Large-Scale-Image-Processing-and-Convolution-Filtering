@@ -1,0 +1,8 @@
+{
+  "name": "pdc-report-builder",
+  "private": true,
+  "description": "Builds report/PDC_Project_Report_Group18.docx (run: node build_report.js)",
+  "dependencies": {
+    "docx": "^9.16.0"
+  }
+}
