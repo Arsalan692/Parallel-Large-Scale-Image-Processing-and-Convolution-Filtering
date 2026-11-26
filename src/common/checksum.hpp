@@ -5,6 +5,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 #include <string>
 
 #include "image.hpp"
@@ -14,9 +15,18 @@ namespace pdc {
 constexpr uint64_t kFnvOffset = 1469598103934665603ULL;
 constexpr uint64_t kFnvPrime = 1099511628211ULL;
 
-// FNV-1a 64-bit hash of a byte buffer (continues from `hash`).
+// FNV-1a style 64-bit hash of a byte buffer (continues from `hash`).
+// Processes 8 bytes per step (instead of 1) so fingerprinting 3 MB of output
+// per image stays cheap compared with the filtering itself.
 inline uint64_t fnv1a64(const uint8_t* data, size_t n, uint64_t hash = kFnvOffset) {
-    for (size_t i = 0; i < n; ++i) {
+    size_t i = 0;
+    for (; i + 8 <= n; i += 8) {
+        uint64_t word;
+        std::memcpy(&word, data + i, 8);
+        hash ^= word;
+        hash *= kFnvPrime;
+    }
+    for (; i < n; ++i) {  // remaining 0..7 bytes
         hash ^= data[i];
         hash *= kFnvPrime;
     }

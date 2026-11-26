@@ -33,7 +33,8 @@ $MpiLibs    = @('-lmsmpi')
 
 # ---- Programs: name -> main source file, needs MPI? -------------------------
 $AllTargets = [ordered]@{
-    'test_common' = @{ Main = 'tests\test_common.cpp';      Mpi = $false }
+    'test_common'     = @{ Main = 'tests\test_common.cpp';     Mpi = $false }
+    'validate_opencv' = @{ Main = 'tests\validate_opencv.cpp'; Mpi = $false }
     'sequential'  = @{ Main = 'src\sequential\main.cpp';    Mpi = $false }
     'openmp'      = @{ Main = 'src\openmp\main.cpp';        Mpi = $false }
     'mpi_batch'   = @{ Main = 'src\mpi_batch\main.cpp';     Mpi = $true  }

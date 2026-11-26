@@ -31,11 +31,14 @@ Apply three convolution filters (Gaussian blur 5×5, sharpen 3×3, Sobel edge de
 - [x] Unit tests for the shared code (`tests/test_common.cpp`): 9/9 pass
 - **Done when:** everything builds with one command and all tests pass
 
-## Phase 2: Sequential baseline
-- [ ] `src/sequential/main.cpp`: one core, every image, all 3 filters
-- [ ] Validate our convolution against OpenCV `filter2D` (used for validation only, never in timed runs)
-- [ ] Save sample outputs for the report
-- **Done when:** the outputs are correct and the 10,000-image baseline time is recorded
+## Phase 2: Sequential baseline ✅
+- [x] `src/sequential/main.cpp`: one core, every image, all 3 filters
+- [x] Validate our convolution against OpenCV `filter2D` / `Sobel` (`tests/validate_opencv.cpp`, 50 X-rays): sharpen and Sobel are 100% identical; blur is 99.82% identical, and the other 0.18% are exact x.5 rounding ties (we round .5 up, OpenCV rounds .5 to even), with 0 real mismatches
+- [x] Sample outputs + `report/figures/sample_filters.png`
+- [x] **Baseline (10,000 images): 212.8 s total = 93.6 s read + 111.8 s compute (+ checksum/overhead)**; checksum `f3eee2e41bf6a7ce` (`results/sequential_baseline.csv`)
+- Lessons:
+  - Reading (PNG decoding) costs about as much as filtering, so the parallel versions should also parallelise reading.
+  - Background load can double run times. Benchmarks need a quiet machine (an earlier run was 559 s with other activity running).
 
 ## Phase 3: OpenMP version
 - [ ] `src/openmp/main.cpp`: `#pragma omp parallel for` over the rows of each image

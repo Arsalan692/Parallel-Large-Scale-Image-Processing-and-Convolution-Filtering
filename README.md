@@ -37,7 +37,7 @@ src/
   openmp/          Phase 3: OpenMP threads
   mpi_batch/       Phase 4A: MPI, whole images distributed across processes (+ OpenMP = hybrid)
   mpi_strips/      Phase 4B: MPI, each image split into strips with halo exchange (+ OpenMP = hybrid)
-tests/             unit tests for the shared code
+tests/             unit tests (test_common) + validation against OpenCV (validate_opencv)
 scripts/           build.ps1 (compile everything), run.ps1 (run, optionally with mpiexec)
 analysis/          Python scripts that turn results into graphs
 results/           benchmark results (CSV)
@@ -68,7 +68,7 @@ Each program accepts `--help` to list its options (`--input`, `--count`, `--save
 ## Status
 - [x] Phase 0: toolchain, dataset, repo
 - [x] Phase 1: project skeleton, shared code, build/run scripts, unit tests
-- [ ] Phase 2: sequential baseline
+- [x] Phase 2: sequential baseline (10,000 images: 212.8 s)
 - [ ] Phase 3: OpenMP version
 - [ ] Phase 4: MPI versions (batch distribution, strip decomposition with halo exchange)
 - [ ] Phase 5: hybrid MPI + OpenMP
