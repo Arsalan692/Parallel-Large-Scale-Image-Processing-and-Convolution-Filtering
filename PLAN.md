@@ -177,9 +177,12 @@ Apply three convolution filters (Gaussian blur 5×5, sharpen 3×3, Sobel edge de
   ```
   `finalize_report.ps1` uses Microsoft Word to fill in the table of contents and export the PDF.
 
-## Phase 9: Submission and viva prep
-- [ ] ZIP of the 10,000 images used, plus source code and the report
-- [ ] Viva Q&A sheet
+## Phase 9: Submission and viva prep ✅
+- [x] `scripts/make_submission.py` builds `../Submission_Group18/` with three parts:
+  - `1_Report/`: the report (.docx + .pdf)
+  - `2_Source_Code/`: a clean `git archive` of the repository
+  - `3_Dataset/`: a ZIP of exactly the 10,000 images used, with a README (source + citation) and SHA-256 sums
+- [x] Viva guide: `viva/Project_Explained_Group18.pdf`. It explains the basics, the project, every graph and every design decision, and ends with a viva kit (one-minute summary, about 25 Q&As, numbers to remember, demo commands)
 
 ---
 
